@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מערכת אבטחה — מוסדות חינוך אשכול</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<!-- ======================================================
+     הגדרת FIREBASE
+     ======================================================
+     לפני שמעלים לאוויר, יש להחליף את הערכים הבאים
+     בערכים האמיתיים מ-Firebase Console שלך.
+     ראה הוראות ב-README או פנה לקב"ט הראשי.
+     ====================================================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  // ⬇️ החלף כאן בפרטי Firebase שלך
+  const firebaseConfig = {
+    apiKey: "REPLACE_WITH_YOUR_API_KEY",
+    authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
+    databaseURL: "REPLACE_WITH_YOUR_DATABASE_URL",
+    projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
+    storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
+    messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
+    appId: "REPLACE_WITH_YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // expose to global scope so non-module scripts can use
+  window._db = db;
+  window._dbRef = ref;
+  window._dbSet = set;
+  window._dbGet = get;
+  window._dbOnValue = onValue;
+  window._firebaseReady = true;
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
+
+<style>
+:root {
+  --bg: #08111f;
+  --surface: #0d1e36;
+  --surface2: #112440;
+  --accent: #e8b84b;
+  --accent2: #f5d070;
+  --blue: #1e4080;
+  --red: #c0392b;
+  --green: #1a6b3a;
+  --text: #dde4f0;
+  --muted: #7a90b8;
+  --border: rgba(232,184,75,0.18);
+  --card-hover: rgba(232,184,75,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  direction: rtl;
+}
+
+
+
+
+/* ── PHONE ADMIN ROWS ── */
+.ph-admin-section {
+  font-size:.72rem;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.08em;
+  padding:10px 0 6px;border-top:1px solid rgba(255,255,255,.06);
+  margin-top:4px;
+}
+.ph-admin-section:first-child { border-top:none; margin-top:0; padding-top:0; }
+.ph-admin-row {
+  display:flex;align-items:center;gap:10px;margin-bottom:7px;
+}
+.ph-admin-label {
+  font-size:.78rem;color:var(--text);min-width:140px;flex-shrink:0;
+}
+.ph-admin-input { margin:0!important;flex:1; }
+.ph-admin-fixed {
+  font-size:.78rem;color:var(--muted);min-width:140px;flex-shrink:0;
+}
+.ph-admin-fixed-val {
+  font-size:.78rem;color:var(--muted);
+  padding:6px 10px;background:rgba(255,255,255,.04);
+  border-radius:6px;border:1px solid rgba(255,255,255,.07);flex:1;
+}
+
+/* ── ADMIN PROC FILE UPLOAD ── */
+.proc-admin-row { margin-bottom:16px; }
+.proc-admin-title { font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:7px; }
+.proc-admin-fixed { font-size:.72rem;color:var(--muted);padding:6px 10px;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(255,255,255,.07); }
+.proc-file-row { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+.file-upload-btn {
+  display:flex;align-items:center;gap:5px;
+  padding:7px 12px;border-radius:7px;border:1px solid rgba(232,184,75,.3);
+  background:rgba(232,184,75,.08);color:var(--accent);
+  font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;
+  transition:.15s;
+}
+.file-upload-btn:hover { background:rgba(232,184,75,.16); }
+.file-upload-btn input[type=file] { display:none; }
+.proc-file-status { margin-top:5px;font-size:.72rem; }
+.proc-file-status.ok  { color:#3dd678; }
+.proc-file-status.err { color:#e07b6f; }
+
+/* ── ROUTE EDITOR ── */
+@keyframes re-pulse-anim {
+  0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}
+  50%{opacity:.15;transform:translate(-50%,-50%) scale(1.8)}
+}
+#route-editor-wrap { display:flex; flex-direction:column; }
+.re-toolbar {
+  display:flex; gap:7px; padding:8px 12px;
+  background:var(--surface2);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  flex-wrap:wrap; align-items:center;
+}
+.re-btn {
+  display:flex;align-items:center;gap:4px;
+  padding:6px 11px;border-radius:7px;border:none;
+  font-family:'Heebo',sans-serif;font-size:.75rem;font-weight:700;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.re-btn:active{transform:scale(.97)}
+.re-secondary{background:rgba(255,255,255,.07);color:var(--text);border:1px solid rgba(255,255,255,.1)}
+.re-secondary:hover{background:rgba(255,255,255,.12)}
+.re-danger{background:rgba(192,57,43,.12);color:#e07b6f;border:1px solid rgba(192,57,43,.25)}
+.re-danger:hover{background:rgba(192,57,43,.22)}
+.re-green{background:rgba(26,107,58,.15);color:#3dd678;border:1px solid rgba(26,107,58,.3)}
+.re-green:hover{background:rgba(26,107,58,.25)}
+.re-sep{width:1px;height:24px;background:rgba(255,255,255,.08);flex-shrink:0}
+.re-speed{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--muted)}
+.re-speed input[type=range]{width:60px;accent-color:var(--accent);cursor:pointer}
+.re-ptcount{margin-right:auto;font-size:.7rem;color:var(--muted);padding:4px 8px;background:rgba(0,0,0,.2);border-radius:6px}
+.re-ptcount span{color:var(--accent);font-weight:700}
+.re-canvas {
+  position:relative;background:#030810;cursor:crosshair;
+  overflow:hidden;touch-action:none;min-height:180px;
+}
+.re-canvas.playing{cursor:default}
+.re-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;
+  background:linear-gradient(135deg,var(--bg),var(--surface));
+}
+.re-placeholder.hidden{display:none}
+.re-playbar{
+  display:flex;gap:8px;padding:7px 12px;
+  background:var(--surface2);border-top:1px solid rgba(255,255,255,.06);
+  align-items:center;flex-wrap:wrap;
+}
+.re-step-card{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(0,0,0,.2);border:1px solid var(--border);
+  border-radius:7px;padding:5px 10px;flex:1;min-width:120px;
+  font-size:.75rem;
+}
+.re-step-num{
+  width:22px;height:22px;border-radius:5px;flex-shrink:0;
+  background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:700;color:var(--accent);
+}
+.re-hint{
+  padding:6px 12px;font-size:.7rem;color:var(--muted);
+  background:rgba(26,61,122,.1);border-top:1px solid rgba(26,61,122,.15);
+}
+.wp-dot{
+  position:absolute;transform:translate(-50%,-50%);
+  cursor:grab;z-index:30;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;transition:transform .12s;
+}
+.wp-dot:hover { transform:translate(-50%,-50%) scale(1.2); }
+.wp-dot:active{ cursor:grabbing; transform:translate(-50%,-50%) scale(1.1); }
+
+/* START — gold flag, bigger */
+.wp-dot.wp-start{
+  width:32px;height:32px;
+  background:linear-gradient(135deg,#f0c040,#c8992a);
+  box-shadow:0 0 0 3px rgba(232,184,75,.4), 0 3px 12px rgba(0,0,0,.6);
+  border-radius:50% 50% 50% 4px;
+  transform:translate(-50%,-100%);
+  z-index:35;
+}
+.wp-dot.wp-start:hover{ transform:translate(-50%,-100%) scale(1.15); }
+
+/* END — green flag, bigger */
+.wp-dot.wp-end{
+  width:32px;height:32px;
+  background:linear-gradient(135deg,#2ecc71,#1a8a4a);
+  box-shadow:0 0 0 3px rgba(46,204,113,.4), 0 3px 12px rgba(0,0,0,.6);
+  border-radius:50% 50% 50% 4px;
+  transform:translate(-50%,-100%);
+  z-index:35;
+}
+.wp-dot.wp-end:hover{ transform:translate(-50%,-100%) scale(1.15); }
+
+/* MID — blue circle */
+.wp-dot.wp-mid{
+  width:13px;height:13px;
+  background:#4a8fd4;
+  box-shadow:0 0 0 2px rgba(74,143,212,.35), 0 2px 6px rgba(0,0,0,.5);
+}
+
+/* Labels on start/end */
+.wp-label{
+  position:absolute;
+  bottom:calc(100% + 4px);
+  left:50%;transform:translateX(-50%);
+  white-space:nowrap;
+  background:rgba(10,20,40,.92);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:5px;
+  padding:2px 7px;
+  font-size:.62rem;font-weight:700;
+  color:#fff;
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+}
+.wp-label.start-lbl{ color:#f0c040; border-color:rgba(240,192,64,.3); }
+.wp-label.end-lbl  { color:#2ecc71; border-color:rgba(46,204,113,.3); }
+
+.wp-num{font-size:.55rem;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none;line-height:1}
+
+/* Delete X button (appears on hover) */
+.wp-delete{
+  position:absolute;
+  top:-7px;right:-7px;
+  width:16px;height:16px;border-radius:50%;
+  background:#c0392b;
+  border:2px solid #fff;
+  color:#fff;font-size:.55rem;font-weight:900;
+  display:none;align-items:center;justify-content:center;
+  cursor:pointer;z-index:40;
+  line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.5);
+}
+.wp-dot:hover .wp-delete{ display:flex; }
+.wp-delete:hover{ background:#e74c3c; transform:scale(1.2); }
+
+/* ── SETUP BANNER ── */
+#setup-banner {
+  display: none;
+  background: linear-gradient(90deg, #7b3a0a, #a05010);
+  color: #ffe8b0;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  text-align: center;
+  position: sticky; top: 0; z-index: 200;
+}
+#setup-banner.show { display: block; }
+#setup-banner a { color: #ffe8b0; font-weight: 700; }
+
+/* ── LOADING ── */
+#loading-screen {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 500; gap: 16px;
+  transition: opacity 0.4s;
+}
+#loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loader-ring {
+  width: 48px; height: 48px;
+  border: 3px solid rgba(232,184,75,0.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { color: var(--muted); font-size: 0.9rem; }
+
+/* ── PAGES ── */
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── TOP BAR ── */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(8,17,31,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-badge {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.logo-text { font-size: 0.95rem; font-weight: 700; line-height: 1.2; }
+.logo-sub { font-size: 0.7rem; color: var(--muted); font-weight: 400; }
+.admin-trigger {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.8rem; cursor: pointer;
+  transition: 0.2s;
+}
+.admin-trigger:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── HOME ── */
+#home-page {
+  background:
+    radial-gradient(ellipse 80% 40% at 10% 0%, rgba(30,64,128,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 30% at 90% 90%, rgba(232,184,75,0.06) 0%, transparent 60%),
+    var(--bg);
+}
+.hero {
+  padding: 40px 20px 28px;
+  text-align: center;
+}
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  background: rgba(232,184,75,0.08);
+  border: 1px solid rgba(232,184,75,0.25);
+  border-radius: 99px;
+  color: var(--accent); font-size: 0.78rem;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 2rem; font-weight: 900;
+  line-height: 1.25; margin-bottom: 8px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { color: var(--muted); font-size: 0.9rem; }
+
+/* connection status */
+.conn-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+}
+.conn-status.online { background: rgba(26,107,58,0.15); color: #5dd98a; }
+.conn-status.offline { background: rgba(192,57,43,0.15); color: #e07b6f; }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+.inst-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 11px;
+  padding: 4px 16px 40px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.inst-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  position: relative; overflow: hidden;
+}
+.inst-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0); transition: transform 0.3s;
+  transform-origin: center;
+}
+.inst-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); border-color: rgba(232,184,75,0.4); background: var(--card-hover); }
+.inst-card:hover::after { transform: scaleX(1); }
+.inst-icon { font-size: 1.7rem; margin-bottom: 8px; }
+.inst-name { font-size: 0.87rem; font-weight: 600; line-height: 1.3; }
+.inst-cta { margin-top: 8px; font-size: 0.72rem; color: var(--accent); opacity: 0.7; }
+
+/* ── INSTITUTION PAGE ── */
+.inst-header {
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--blue) 100%);
+  padding: 16px 20px 20px;
+  border-bottom: 2px solid var(--accent);
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none;
+  color: var(--muted); font-family: 'Heebo', sans-serif;
+  font-size: 0.82rem; cursor: pointer;
+  padding: 5px 0; margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.back-btn:hover { color: var(--accent); }
+.inst-page-title { font-size: 1.5rem; font-weight: 900; }
+.inst-page-sub { color: var(--accent); font-size: 0.8rem; margin-top: 3px; }
+
+/* tabs */
+.tabs {
+  display: flex;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 1; min-width: 75px;
+  padding: 13px 6px;
+  text-align: center;
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--muted); cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: 0.2s; white-space: nowrap;
+}
+.tab .ti { font-size: 1rem; display: block; margin-bottom: 3px; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { display: none; padding: 20px 16px; }
+.tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+
+/* map tab */
+.map-open-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, var(--blue), #0d2a5e);
+  border: 1px solid rgba(30,64,128,0.6);
+  border-radius: 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'Heebo', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  margin-bottom: 12px;
+  transition: 0.2s;
+}
+.map-open-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+.map-open-btn .map-icon { font-size: 1.8rem; }
+.map-open-btn .map-text { text-align: right; }
+.map-open-btn .map-title { font-size: 1rem; font-weight: 700; }
+.map-open-btn .map-sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+.map-placeholder {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 44px 20px;
+  text-align: center;
+}
+.map-placeholder .mpi { font-size: 2.8rem; margin-bottom: 12px; }
+.map-placeholder p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.map-placeholder .mp-name { color: var(--text); font-weight: 700; }
+.map-placeholder .mp-hint { color: var(--accent); font-size: 0.8rem; margin-top: 10px; }
+
+.proc-section-label {
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.06em;
+  margin-bottom: 10px; padding-right: 4px;
+}
+/* procedure cards */
+.proc-list { display: flex; flex-direction: column; gap: 11px; }
+.proc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.proc-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; cursor: pointer;
+  transition: background 0.2s;
+}
+.proc-head:hover { background: var(--card-hover); }
+.proc-head-r { display: flex; align-items: center; gap: 10px; }
+.proc-n {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: rgba(232,184,75,0.12);
+  border: 1px solid rgba(232,184,75,0.25);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.82rem; font-weight: 700; color: var(--accent);
+}
+.proc-name { font-weight: 600; font-size: 0.9rem; }
+.proc-badge {
+  font-size: 0.7rem; padding: 3px 9px; border-radius: 99px;
+}
+.proc-badge.ok { background: rgba(26,107,58,0.18); color: #5dd98a; border: 1px solid rgba(26,107,58,0.35); }
+.proc-badge.pend { background: rgba(192,57,43,0.12); color: #e07b6f; border: 1px solid rgba(192,57,43,0.25); }
+.proc-chev { color: var(--muted); font-size: 0.75rem; transition: transform 0.2s; flex-shrink: 0; }
+.proc-card.open .proc-chev { transform: rotate(180deg); }
+.proc-body { display: none; padding: 0 16px 16px; }
+.proc-card.open .proc-body { display: block; }
+.proc-body p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+.proc-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 12px; padding: 9px 18px;
+  background: var(--blue);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; color: var(--text);
+  text-decoration: none; font-size: 0.83rem; font-weight: 600;
+  transition: 0.2s;
+}
+.proc-link:hover { border-color: var(--accent); }
+
+/* phone list */
+.phone-section-label {
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.1em;
+  text-transform: uppercase; margin: 18px 0 8px;
+}
+.phone-section-label:first-child { margin-top: 0; }
+.phone-list { display: flex; flex-direction: column; gap: 8px; }
+.phone-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px; padding: 13px 14px;
+  transition: border-color 0.2s;
+}
+.phone-row:hover { border-color: rgba(232,184,75,0.35); }
+.ph-left { display: flex; align-items: center; gap: 10px; }
+.ph-av {
+  width: 38px; height: 38px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.ph-av.emerg { background: rgba(192,57,43,0.18); }
+.ph-av.person { background: rgba(30,64,128,0.45); }
+.ph-av.service { background: rgba(26,107,58,0.18); }
+.ph-name { font-weight: 600; font-size: 0.88rem; }
+.ph-role { font-size: 0.74rem; color: var(--muted); margin-top: 1px; }
+.ph-right { display: flex; align-items: center; gap: 8px; }
+.ph-num { font-size: 0.95rem; font-weight: 700; color: var(--accent); direction: ltr; }
+.ph-miss { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+.call-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(26,107,58,0.25);
+  border: 1px solid rgba(26,107,58,0.4);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; font-size: 0.95rem;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.call-btn:hover { background: rgba(26,107,58,0.5); }
+
+/* ── ADMIN OVERLAY ── */
+#admin-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  align-items: center; justify-content: center;
+}
+#admin-overlay.show { display: flex; }
+.admin-modal {
+  background: var(--surface2);
+  border: 1px solid var(--accent);
+  border-radius: 18px; padding: 36px 32px;
+  width: 320px; text-align: center;
+  animation: fadeIn 0.2s ease;
+}
+.admin-modal h2 { color: var(--accent); margin-bottom: 6px; font-size: 1.3rem; }
+.admin-modal p { color: var(--muted); font-size: 0.85rem; margin-bottom: 22px; }
+.modal-input {
+  width: 100%; padding: 11px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'Heebo', sans-serif;
+  font-size: 1rem; text-align: center;
+  direction: ltr; outline: none;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-err { color: #e07b6f; font-size: 0.82rem; min-height: 18px; margin-bottom: 14px; }
+.modal-btns { display: flex; gap: 10px; }
+.btn-gold {
+  flex: 1; padding: 11px;
+  background: var(--accent); color: var(--bg);
+  border: none; border-radius: 8px;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700; font-size: 0.95rem; cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-gold:hover { background: var(--accent2); }
+.btn-ghost {
+  flex: 1; padding: 11px;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.95rem; cursor: pointer;
+  transition: 0.2s;
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+/* ── ADMIN PAGE ── */
+#admin-page { min-height: 100vh; padding-bottom: 60px; }
+.admin-topbar {
+  background: var(--surface2);
+  border-bottom: 2px solid var(--accent);
+  padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.admin-topbar h1 { font-size: 1.2rem; font-weight: 700; }
+.admin-topbar h1 span { color: var(--accent); }
+.btn-danger {
+  padding: 7px 14px;
+  background: rgba(192,57,43,0.12);
+  border: 1px solid rgba(192,57,43,0.3);
+  border-radius: 8px; color: #e07b6f;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.82rem; cursor: pointer;
+  transition: 0.2s;
+}
+.btn-danger:hover { background: rgba(192,57,43,0.25); }
+.admin-body { padding: 20px 16px; }
+.a-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px; margin-bottom: 16px;
+  overflow: hidden;
+}
+.a-card-head {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700; font-size: 0.9rem;
+  color: var(--accent);
+  display: flex; align-items: center; gap: 7px;
+}
+.a-card-body { padding: 18px; }
+.f-label { font-size: 0.78rem; color: var(--muted); display: block; margin-bottom: 5px; }
+.f-input {
+  width: 100%; padding: 9px 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.88rem; outline: none;
+  transition: border-color 0.2s; margin-bottom: 13px;
+}
+.f-input:focus { border-color: var(--accent); }
+.f-input::placeholder { color: rgba(122,144,184,0.4); }
+.f-save-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+.save-ok { color: #5dd98a; font-size: 0.82rem; opacity: 0; transition: opacity 0.3s; }
+.save-ok.show { opacity: 1; }
+.inst-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.i-pill {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 99px; font-size: 0.76rem;
+  cursor: pointer; transition: 0.2s;
+  background: transparent; color: var(--muted);
+  font-family: 'Heebo', sans-serif;
+}
+.i-pill.on { background: rgba(232,184,75,0.12); border-color: var(--accent); color: var(--accent); }
+
+/* firebase setup helper */
+.setup-steps {
+  background: rgba(30,64,128,0.15);
+  border: 1px solid rgba(30,64,128,0.4);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-top: 14px;
+}
+.setup-steps h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 10px; }
+.setup-steps ol { padding-right: 18px; }
+.setup-steps li {
+  color: var(--muted); font-size: 0.83rem;
+  line-height: 1.7; margin-bottom: 4px;
+}
+.setup-steps li strong { color: var(--text); }
+.setup-steps a { color: var(--accent); }
+
+@media (max-width: 420px) {
+  .hero h1 { font-size: 1.65rem; }
+  .inst-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="loader-ring"></div>
+  <div class="loader-text">טוען נתונים...</div>
+</div>
+
+<!-- SETUP BANNER (shown if Firebase not configured) -->
+<div id="setup-banner">
+  ⚠️ Firebase טרם הוגדר — האתר עובד במצב מקומי בלבד.
+  <a href="#" onclick="openAdminLogin();return false;">כנס ללוח הבקרה</a> להוראות הגדרה.
+</div>
+
+<!-- ADMIN LOGIN OVERLAY -->
+<div id="admin-overlay">
+  <div class="admin-modal">
+    <h2>🔐 כניסת מנהל</h2>
+    <p>הזן סיסמת ניהול לגישה ללוח הבקרה</p>
+    <input class="modal-input" type="password" id="pass-input" placeholder="סיסמה"
+           onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="modal-err" id="pass-err"></div>
+    <div class="modal-btns">
+      <button class="btn-gold" onclick="doLogin()">כניסה</button>
+      <button class="btn-ghost" onclick="closeOverlay()">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════════ -->
+<div id="home-page" class="page active">
+  <div class="top-bar">
+    <div class="logo">
+      <div class="logo-badge">🛡️</div>
+      <div>
+        <div class="logo-text">מערכת אבטחה</div>
+        <div class="logo-sub">מועצה אזורית אשכול</div>
+      </div>
+    </div>
+    <button class="admin-trigger" onclick="openAdminLogin()">⚙️ ניהול</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-pill">🏫 13 מוסדות חינוך</div>
+    <h1>בחר <em>מוסד חינוכי</em></h1>
+    <p>לחץ על המוסד לצפייה בנהלים ומסלולי סריקה</p>
+    <div class="conn-status offline" id="conn-indicator">
+      <span class="conn-dot"></span>
+      <span id="conn-text">מתחבר...</span>
+    </div>
+  </div>
+
+  <div class="inst-grid">
+    <div class="inst-card" onclick="openInst(0)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור קדמי</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(1)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור אחורי</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(2)"><div class="inst-icon">🏫</div><div class="inst-name">מרחבי אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(3)"><div class="inst-icon">🌾</div><div class="inst-name">שדות אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(4)"><div class="inst-icon">🌅</div><div class="inst-name">שחר אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(5)"><div class="inst-icon">☀️</div><div class="inst-name">שמש אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(6)"><div class="inst-icon">📚</div><div class="inst-name">בית ספר בנות</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(7)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנים</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(8)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנות</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(9)"><div class="inst-icon">📖</div><div class="inst-name">תלמוד תורה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(10)"><div class="inst-icon">🌿</div><div class="inst-name">ישיבת נווה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(11)"><div class="inst-icon">✡️</div><div class="inst-name">אולפנה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(12)"><div class="inst-icon">🌱</div><div class="inst-name">רגבים</div><div class="inst-cta">← פתח</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     INSTITUTION PAGE
+══════════════════════════════════════════ -->
+<div id="inst-page" class="page">
+  <div class="inst-header">
+    <button class="back-btn" onclick="goHome()">▶ חזרה לרשימה</button>
+    <div class="inst-page-title" id="inst-title">—</div>
+    <div class="inst-page-sub">מועצה אזורית אשכול — מערכת אבטחה</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(0)"><span class="ti">🗺️</span>מסלול סריקה</div>
+    <div class="tab" onclick="switchTab(1)"><span class="ti">📋</span>נהלים</div>
+    <div class="tab" onclick="switchTab(2)"><span class="ti">📞</span>טלפונים חיוניים</div>
+  </div>
+
+  <!-- TAB 0: ROUTE VIEW (read-only, published by admin) -->
+  <div class="tab-content active" id="tc-0">
+    <div id="map-content"></div>
+  </div>
+
+    <!-- TAB 1: PROCEDURES (police + routine combined) -->
+  <div class="tab-content" id="tc-1">
+    <div id="all-procs"></div>
+  </div>
+
+  <!-- TAB 2: PHONES -->
+  <div class="tab-content" id="tc-2">
+    <div id="phone-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN PAGE
+══════════════════════════════════════════ -->
+<div id="admin-page" class="page">
+  <div class="admin-topbar">
+    <div>
+      <h1>⚙️ לוח <span>בקרה</span></h1>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:2px">עדכונים מתפשטים מיידית לכל המאבטחים</div>
+    </div>
+    <button class="btn-danger" onclick="doLogout()">יציאה</button>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- Firebase setup helper -->
+    <div class="a-card" id="firebase-setup-card" style="display:none">
+      <div class="a-card-head">🔧 הגדרת Firebase (חובה)</div>
+      <div class="a-card-body">
+        <p style="color:var(--muted);font-size:0.85rem">כדי שהעדכונים יגיעו לכל המאבטחים בזמן אמת, יש להגדיר Firebase פעם אחת.</p>
+        <div class="setup-steps">
+          <h4>הוראות הגדרה (5 דקות):</h4>
+          <ol>
+            <li>כנס ל־<a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></li>
+            <li>לחץ <strong>"Add project"</strong> ← שם כלשהו ← Continue</li>
+            <li>בתפריט הצדדי: <strong>Build → Realtime Database → Create database</strong></li>
+            <li>בחר <strong>"Start in test mode"</strong> ← Enable</li>
+            <li>לחץ על ⚙️ ← <strong>Project settings</strong> ← גלול ל־"Your apps" ← לחץ &lt;/&gt;</li>
+            <li>רשום שם אפליקציה ← <strong>Register app</strong></li>
+            <li>העתק את ה־<strong>firebaseConfig</strong> והדבק בקובץ ה־HTML (בתחילת הקובץ, ב־initializeApp)</li>
+            <li>העלה מחדש ל-GitHub — האתר יתחבר אוטומטית</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phones -->
+    <div class="a-card">
+      <div class="a-card-head">📞 טלפונים</div>
+      <div class="a-card-body">
+
+        <!-- ── חירום ומוקד (כלל-מועצה) ── -->
+        <div class="ph-admin-section">🚨 חירום ומוקד — כלל המועצה</div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">👮 משטרת ישראל</label>
+          <input class="f-input ph-admin-input" id="a-police" placeholder="100" type="tel" dir="ltr">
+        </div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">🚑 מד"א</label>
+          <input class="f-input ph-admin-input" id="a-mada" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">🚒 כבאות והצלה</label>
+          <input class="f-input ph-admin-input" id="a-fire" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">📡 מוקד אשכול</label>
+          <input class="f-input ph-admin-input" id="a-mokad" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+
+        <!-- ── קב"טים (כלל-מועצה) ── -->
+        <div class="ph-admin-section">🛡️ קב"טים — כלל המועצה</div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">👤 אלדד גד סעד</label>
+          <input class="f-input ph-admin-input" id="a-eldad" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">👤 מור אמסלם</label>
+          <input class="f-input ph-admin-input" id="a-mor" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+        <div class="ph-admin-row">
+          <label class="ph-admin-label">👤 שלומי ממן</label>
+          <input class="f-input ph-admin-input" id="a-shlomi" placeholder="מספר טלפון" type="tel" dir="ltr">
+        </div>
+
+        <!-- ── מנהל ורכז — לפי מוסד ── -->
+        <div class="ph-admin-section">🏫 מנהל ורכז ביטחון — לפי מוסד</div>
+        <label class="f-label" style="margin-bottom:6px">בחר מוסד לעריכה</label>
+        <div class="inst-pills" id="phone-inst-pills"></div>
+
+        <div id="inst-phone-editor" style="margin-top:12px">
+          <div class="ph-admin-row">
+            <label class="ph-admin-label">👔 שם מנהל</label>
+            <input class="f-input ph-admin-input" id="a-principal-name" placeholder="שם מלא" type="text">
+          </div>
+          <div class="ph-admin-row">
+            <label class="ph-admin-label">📱 טלפון מנהל</label>
+            <input class="f-input ph-admin-input" id="a-principal-phone" placeholder="מספר טלפון" type="tel" dir="ltr">
+          </div>
+          <div class="ph-admin-row">
+            <label class="ph-admin-label">🔐 שם רכז ביטחון</label>
+            <input class="f-input ph-admin-input" id="a-security-name" placeholder="שם מלא" type="text">
+          </div>
+          <div class="ph-admin-row">
+            <label class="ph-admin-label">📱 טלפון רכז</label>
+            <input class="f-input ph-admin-input" id="a-security-phone" placeholder="מספר טלפון" type="tel" dir="ltr">
+          </div>
+        </div>
+
+        <div class="f-save-row" style="margin-top:10px">
+          <span class="save-ok" id="ok-phones">✓ נשמר</span>
+          <button class="btn-gold" onclick="savePhones()">שמור טלפונים</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Maps / Route Editor (admin only) -->
+    <div class="a-card">
+      <div class="a-card-head">🗺️ מסלולי סריקה</div>
+      <div class="a-card-body" style="padding:0">
+        <!-- Institution selector -->
+        <div style="padding:12px 14px 8px">
+          <label class="f-label">בחר מוסד לעריכה</label>
+          <div class="inst-pills" id="map-pills"></div>
+        </div>
+        <!-- Route editor toolbar -->
+        <div class="re-toolbar">
+          <button class="re-btn re-secondary" onclick="reUpload()">📁 העלה תמונה</button>
+          <input type="file" id="re-file-input" accept="image/*" style="display:none" onchange="reLoadImage(event)">
+          <div class="re-sep"></div>
+          <button class="re-btn re-secondary" onclick="reUndo()" title="בטל נקודה אחרונה (Ctrl+Z)">↩ בטל</button>
+          <button class="re-btn re-secondary" id="re-redo-btn" onclick="reRedo()" title="החזר נקודה (Ctrl+Y)" style="opacity:.4">↪ החזר</button>
+          <button class="re-btn re-danger" onclick="reClear()">🗑 נקה</button>
+          <div class="re-sep"></div>
+          <button class="re-btn re-green" id="re-play-btn" onclick="reStartPlay()">▶ תצוגה מקדימה</button>
+          <button class="re-btn re-secondary" id="re-stop-btn" onclick="reStopPlay()" style="display:none">⏹ עצור</button>
+          <div class="re-sep"></div>
+          <div class="re-speed">
+            <span>מהירות:</span>
+            <input type="range" id="re-speed" min="1" max="5" value="3" oninput="reUpdateSpeed(this.value)">
+            <span id="re-speed-lbl">×3</span>
+          </div>
+          <div class="re-ptcount">נקודות: <span id="re-pt-count">0</span></div>
+        </div>
+        <!-- Canvas -->
+        <div class="re-canvas" id="re-canvas"
+             onclick="reOnClick(event)"
+             onmousemove="reOnHover(event)"
+             ontouchend="reOnTouch(event)">
+          <div class="re-placeholder" id="re-placeholder">
+            <div style="font-size:2.5rem;opacity:.4">🗺️</div>
+            <div style="color:var(--muted);font-size:.82rem;margin:8px 0 12px">העלה תמונת מפה של המוסד</div>
+            <button class="re-btn re-secondary" onclick="reUpload()">📁 בחר תמונה</button>
+          </div>
+          <img id="re-img" src="" alt="" style="width:100%;display:none">
+          <svg id="re-svg" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"
+               viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+              <filter id="re-glow"><feGaussianBlur stdDeviation="0.4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <marker id="re-arr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0.6 L4,2.5 L0,4.4 L1.2,2.5 Z" fill="#e8b84b" opacity=".9"/></marker>
+              <marker id="re-arr-p" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0.5 L3.5,2 L0,3.5 L1,2 Z" fill="rgba(232,184,75,.4)"/></marker>
+            </defs>
+            <path id="re-halo"  d="" fill="none" stroke="rgba(232,184,75,.15)" stroke-width="2.2" stroke-linecap="round"/>
+            <path id="re-route" d="" fill="none" stroke="#e8b84b" stroke-width="0.7"
+                  stroke-linecap="round" stroke-linejoin="round"
+                  filter="url(#re-glow)" marker-mid="url(#re-arr)" opacity=".94"/>
+            <line id="re-prev" x1="0" y1="0" x2="0" y2="0"
+                  stroke="rgba(232,184,75,.35)" stroke-width="0.45"
+                  stroke-dasharray="1.5 1.2" marker-end="url(#re-arr-p)" display="none"/>
+          </svg>
+          <div id="re-pulse" style="display:none;position:absolute;width:44px;height:44px;border-radius:50%;
+               background:radial-gradient(circle,rgba(232,184,75,.5) 0%,transparent 70%);
+               transform:translate(-50%,-50%);z-index:19;pointer-events:none;
+               animation:re-pulse-anim 1.3s ease-in-out infinite"></div>
+          <div id="re-guard" style="display:none;position:absolute;transform:translate(-50%,-50%);z-index:20;pointer-events:none;
+               filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))">
+            <svg width="36" height="36" viewBox="0 0 36 36">
+              <ellipse cx="18" cy="8" rx="7" ry="4.8" fill="#1a3a6b"/>
+              <rect x="11" y="10.5" width="14" height="2.3" rx="1.2" fill="#1a3a6b"/>
+              <rect x="12" y="11" width="12" height="1.6" rx=".8" fill="#0d2240" opacity=".7"/>
+              <circle cx="18" cy="13" r="4.8" fill="#FFD180"/>
+              <rect x="11.5" y="17.5" width="13" height="10.5" rx="2.8" fill="#1e4d8c"/>
+              <rect x="11.5" y="20" width="13" height="2.2" fill="#e8b84b" opacity=".9"/>
+              <rect x="11.5" y="24" width="13" height="2.2" fill="#e8b84b" opacity=".9"/>
+              <rect x="15.5" y="18.5" width="5" height="3" rx="1" fill="#e8b84b"/>
+              <rect x="5.5" y="17.5" width="6" height="8" rx="2.3" fill="#1e4d8c"/>
+              <rect x="24.5" y="17.5" width="6" height="8" rx="2.3" fill="#1e4d8c"/>
+              <circle cx="8.5" cy="26.5" r="1.9" fill="#FFD180"/>
+              <circle cx="27.5" cy="26.5" r="1.9" fill="#FFD180"/>
+              <rect x="12.5" y="28" width="4.5" height="7" rx="2" fill="#0d2240"/>
+              <rect x="19" y="28" width="4.5" height="7" rx="2" fill="#0d2240"/>
+              <rect x="11.5" y="33" width="6" height="3" rx="1.5" fill="#111"/>
+              <rect x="18.5" y="33" width="6" height="3" rx="1.5" fill="#111"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Playback bar -->
+        <div class="re-playbar" id="re-playbar">
+          <div class="re-step-card">
+            <div class="re-step-num" id="re-step-num">—</div>
+            <div id="re-step-txt">לחץ "תצוגה מקדימה" לבדיקה</div>
+          </div>
+          <div style="flex:1;min-width:80px">
+            <div style="height:4px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden">
+              <div id="re-prog-fill" style="height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:99px;width:0%;transition:width .3s"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted);margin-top:3px">
+              <span id="re-prog-pct">0%</span><span id="re-prog-pts">0/0</span>
+            </div>
+          </div>
+        </div>
+        <div class="re-hint">💡 לחץ על המפה לסימון נקודות · גרור להזזה · לחץ פעמיים למחיקה</div>
+        <!-- PUBLISH BUTTON -->
+        <div style="padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <span style="font-size:.78rem;color:var(--muted)">לאחר סיום תכנון המסלול — פרסם לכל המאבטחים</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="save-ok" id="ok-map">✓ פורסם!</span>
+            <button class="btn-gold" onclick="publishRoute()" style="display:flex;align-items:center;gap:6px">
+              🚀 פרסם מסלול
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Procedures -->
+    <div class="a-card">
+      <div class="a-card-head">📋 נהלי משטרה</div>
+      <div class="a-card-body">
+        <p style="color:var(--muted);font-size:.8rem;margin-bottom:14px">לכל נוהל ניתן להזין קישור PDF <strong>או</strong> לצרף קובץ מהמחשב</p>
+
+        <!-- נוהל פתיחה באש -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">1. נוהל פתיחה באש</div>
+          <div class="proc-file-row">
+            <input class="f-input" id="a-shoot" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf">
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('shoot',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-shoot"></div>
+        </div>
+
+        <!-- נוהל לחימה -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">2. נוהל לחימה בעת תקרית</div>
+          <div class="proc-file-row">
+            <input class="f-input" id="a-combat" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('combat',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-combat"></div>
+        </div>
+
+        <!-- נוהל הודעה אנונימית -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">3. נוהל הודעה אנונימית</div>
+          <div class="proc-file-row">
+            <input class="f-input" id="a-anon" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('anon',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-anon"></div>
+        </div>
+
+        <!-- חפץ חשוד -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">4. חפץ חשוד</div>
+          <div class="proc-file-row">
+            <input class="f-input" id="a-suspect" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('suspect',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-suspect"></div>
+        </div>
+
+        <div class="f-save-row" style="margin-top:4px">
+          <span class="save-ok" id="ok-procs">✓ נשמר</span>
+          <button class="btn-gold" onclick="saveProcs()">שמור נהלי משטרה</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Routine procs -->
+    <div class="a-card">
+      <div class="a-card-head">📋 נהלי שגרה</div>
+      <div class="a-card-body">
+        <!-- כניסה ויציאה -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">1. כניסה ויציאה</div>
+          <div class="proc-file-row">
+            <textarea class="f-input" id="a-r1" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('r1file',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-r1file"></div>
+        </div>
+
+        <!-- פיקוח ומעקב -->
+        <div class="proc-admin-row">
+          <div class="proc-admin-title">2. פיקוח ומעקב</div>
+          <div class="proc-file-row">
+            <textarea class="f-input" id="a-r2" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
+            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <label class="file-upload-btn">
+              📎 צרף קובץ
+              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('r2file',this)">
+            </label>
+          </div>
+          <div class="proc-file-status" id="fs-r2file"></div>
+        </div>
+
+        <div class="f-save-row" style="margin-top:4px">
+          <span class="save-ok" id="ok-routine">✓ נשמר</span>
+          <button class="btn-gold" onclick="saveRoutine()">שמור נהלי שגרה</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="a-card">
+      <div class="a-card-head">🔐 שינוי סיסמה</div>
+      <div class="a-card-body">
+        <label class="f-label">סיסמה חדשה (לפחות 4 תווים)</label>
+        <input class="f-input" id="a-newpass" type="password" dir="ltr" placeholder="••••••">
+        <div class="f-save-row">
+          <span class="save-ok" id="ok-pass">✓ סיסמה שונתה</span>
+          <button class="btn-gold" onclick="changePass()">שמור סיסמה</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+const INSTS = [
+  'נופי הבשור קדמי','נופי הבשור אחורי','מרחבי אשכול','שדות אשכול',
+  'שחר אשכול','שמש אשכול','בית ספר בנות','נועם נצרים בנים',
+  'נועם נצרים בנות','תלמוד תורה','ישיבת נווה','אולפנה','רגבים'
+];
+const PASS_KEY = 'sec_admin_pass';
+const DEFAULT_PASS = '1234';
+
+// In-memory cache (updated by Firebase listener)
+let appData = { phones:{}, maps:{}, procs:{}, routine:{} };
+let fbReady = false;
+let currentInst = 0;
+let selMapInst  = 0;
+let selPhoneInst = 0;
+
+// ── Firebase helpers ──
+function dbRef(path) { return window._dbRef(window._db, path); }
+function dbSet(path, val) { return window._dbSet(dbRef(path), val); }
+function dbGet(path) { return window._dbGet(dbRef(path)); }
+function dbListen(path, cb) { window._dbOnValue(dbRef(path), snap => cb(snap.val())); }
+
+function isFirebaseConfigured() {
+  // Check if the placeholder values are still there
+  try {
+    const el = document.querySelector('script[type="module"]');
+    if (!el) return false;
+    return !el.textContent.includes('REPLACE_WITH_YOUR_API_KEY');
+  } catch(e) { return false; }
+}
+
+// ── Init ──
+window.addEventListener('firebase-ready', () => {
+  fbReady = true;
+  if (!isFirebaseConfigured()) {
+    // Firebase not configured — work offline with localStorage
+    document.getElementById('setup-banner').classList.add('show');
+    loadFromLocal();
+    hideLoading();
+    return;
+  }
+  // Listen to all data
+  dbListen('data', val => {
+    if (val) {
+      appData = { phones:{}, maps:{}, procs:{}, routine:{}, ...val };
+    }
+    hideLoading();
+    updateConnStatus(true);
+  });
+});
+
+// Fallback if Firebase module fails to load
+setTimeout(() => {
+  if (!fbReady) {
+    document.getElementById('setup-banner').classList.add('show');
+    loadFromLocal();
+    hideLoading();
+  }
+}, 3000);
+
+function loadFromLocal() {
+  try {
+    const s = localStorage.getItem('sec_data');
+    if (s) appData = JSON.parse(s);
+  } catch(e) {}
+}
+function saveLocal() {
+  try { localStorage.setItem('sec_data', JSON.stringify(appData)); } catch(e) {}
+}
+
+function hideLoading() {
+  const l = document.getElementById('loading-screen');
+  l.classList.add('hidden');
+  setTimeout(() => l.style.display='none', 500);
+}
+
+function updateConnStatus(online) {
+  const el = document.getElementById('conn-indicator');
+  const txt = document.getElementById('conn-text');
+  el.className = 'conn-status ' + (online ? 'online' : 'offline');
+  txt.textContent = online ? 'מחובר — נתונים מעודכנים' : 'לא מחובר';
+}
+
+// ── Navigation ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome() { showPage('home-page'); }
+
+function openInst(idx) {
+  currentInst = idx;
+  document.getElementById('inst-title').textContent = INSTS[idx];
+  switchTab(0);
+  showPage('inst-page');
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-content').forEach((c,i) => c.classList.toggle('active', i===idx));
+  if (idx===0) renderMap();
+  if (idx===1) renderAllProcs();
+  if (idx===2) renderPhones();
+}
+
+// ── Render: Map (view-only published route) ──
+function renderMap() {
+  if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
+  const pub = (appData.publishedRoutes || {})[currentInst];
+  const el  = document.getElementById('map-content');
+  if (!pub || !pub.image) {
+    el.innerHTML = `
+      <div class="map-placeholder">
+        <div class="mpi">🗺️</div>
+        <p>מסלול סריקה עבור<br><span class="mp-name">${escHtml(INSTS[currentInst])}</span><br>טרם פורסם</p>
+        <p class="mp-hint">קב"ט — הכן ופרסם מסלול דרך לוח הבקרה</p>
+      </div>`;
+    return;
+  }
+
+  const wps = pub.waypoints || [];
+  // Build smooth curved path (same as editor)
+  function buildViewPath(pts) {
+    if (pts.length < 2) return '';
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length-1; i++) {
+      const mx = (pts[i].x+pts[i+1].x)/2, my = (pts[i].y+pts[i+1].y)/2;
+      d += ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
+    }
+    d += ` L ${pts[pts.length-1].x} ${pts[pts.length-1].y}`;
+    return d;
+  }
+  const pathD = buildViewPath(wps);
+
+  // Build waypoint markers HTML (start, mid, end)
+  let wpMarkersHTML = '';
+  wps.forEach((pt, i) => {
+    const n = wps.length;
+    const isStart = i === 0;
+    const isEnd   = i === n-1 && n > 1;
+    if (isStart) {
+      wpMarkersHTML += `
+        <div style="position:absolute;left:${pt.x}%;top:${pt.y}%;transform:translate(-50%,-100%);z-index:15;pointer-events:none">
+          <div style="background:linear-gradient(135deg,#f0c040,#c8992a);width:28px;height:28px;border-radius:50% 50% 50% 4px;
+               display:flex;align-items:center;justify-content:center;
+               box-shadow:0 0 0 3px rgba(240,192,64,.4),0 3px 10px rgba(0,0,0,.6)">
+            <span style="font-size:.7rem;font-weight:900;color:#07111e">▶</span>
+          </div>
+          <div style="background:rgba(10,20,40,.92);border:1px solid rgba(240,192,64,.4);border-radius:5px;
+               padding:2px 7px;font-size:.6rem;font-weight:700;color:#f0c040;white-space:nowrap;
+               margin-top:2px;text-align:center">תחילת סריקה</div>
+        </div>`;
+    } else if (isEnd) {
+      wpMarkersHTML += `
+        <div style="position:absolute;left:${pt.x}%;top:${pt.y}%;transform:translate(-50%,-100%);z-index:15;pointer-events:none">
+          <div style="background:linear-gradient(135deg,#2ecc71,#1a8a4a);width:28px;height:28px;border-radius:50% 50% 50% 4px;
+               display:flex;align-items:center;justify-content:center;
+               box-shadow:0 0 0 3px rgba(46,204,113,.4),0 3px 10px rgba(0,0,0,.6)">
+            <span style="font-size:.7rem;font-weight:900;color:#fff">■</span>
+          </div>
+          <div style="background:rgba(10,20,40,.92);border:1px solid rgba(46,204,113,.4);border-radius:5px;
+               padding:2px 7px;font-size:.6rem;font-weight:700;color:#2ecc71;white-space:nowrap;
+               margin-top:2px;text-align:center">סוף סריקה</div>
+        </div>`;
+    } else {
+      wpMarkersHTML += `
+        <div style="position:absolute;left:${pt.x}%;top:${pt.y}%;transform:translate(-50%,-50%);z-index:14;pointer-events:none">
+          <div style="width:11px;height:11px;border-radius:50%;background:#4a8fd4;
+               box-shadow:0 0 0 2px rgba(74,143,212,.4),0 2px 5px rgba(0,0,0,.5);
+               display:flex;align-items:center;justify-content:center">
+            <span style="font-size:.45rem;font-weight:900;color:#fff">${i}</span>
+          </div>
+        </div>`;
+    }
+  });
+
+  el.innerHTML = `
+    <div style="position:relative;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.5)">
+      <img src="${pub.image}" alt="מסלול סריקה" style="width:100%;display:block">
+
+      <!-- Route SVG -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"
+           viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <filter id="vg"><feGaussianBlur stdDeviation="0.4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <marker id="va" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0.6 L4,2.5 L0,4.4 L1.2,2.5 Z" fill="#e8b84b" opacity=".9"/></marker>
+        </defs>
+        <path d="${pathD}" fill="none" stroke="rgba(232,184,75,.18)" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="${pathD}" fill="none" stroke="#e8b84b" stroke-width="0.7"
+              stroke-linecap="round" stroke-linejoin="round"
+              filter="url(#vg)" marker-mid="url(#va)" opacity=".94"/>
+      </svg>
+
+      <!-- Waypoint markers (start/mid/end) -->
+      ${wpMarkersHTML}
+
+      <!-- Guard (hidden until play) -->
+      <div id="view-guard-pulse" style="display:none;position:absolute;width:44px;height:44px;border-radius:50%;
+           background:radial-gradient(circle,rgba(232,184,75,.5) 0%,transparent 70%);
+           transform:translate(-50%,-50%);z-index:19;pointer-events:none;
+           animation:re-pulse-anim 1.3s ease-in-out infinite"></div>
+      <div id="view-guard" style="display:none;position:absolute;transform:translate(-50%,-50%);z-index:20;pointer-events:none;
+           filter:drop-shadow(0 3px 8px rgba(0,0,0,.8))">
+        <svg width="36" height="36" viewBox="0 0 36 36">
+          <ellipse cx="18" cy="8" rx="7" ry="4.8" fill="#1a3a6b"/>
+          <rect x="11" y="10.5" width="14" height="2.3" rx="1.2" fill="#1a3a6b"/>
+          <circle cx="18" cy="13" r="4.8" fill="#FFD180"/>
+          <rect x="11.5" y="17.5" width="13" height="10.5" rx="2.8" fill="#1e4d8c"/>
+          <rect x="11.5" y="20" width="13" height="2.2" fill="#e8b84b" opacity=".9"/>
+          <rect x="11.5" y="24" width="13" height="2.2" fill="#e8b84b" opacity=".9"/>
+          <rect x="5.5" y="17.5" width="6" height="8" rx="2.3" fill="#1e4d8c"/>
+          <rect x="24.5" y="17.5" width="6" height="8" rx="2.3" fill="#1e4d8c"/>
+          <circle cx="8.5" cy="26.5" r="1.9" fill="#FFD180"/>
+          <circle cx="27.5" cy="26.5" r="1.9" fill="#FFD180"/>
+          <rect x="12.5" y="28" width="4.5" height="7" rx="2" fill="#0d2240"/>
+          <rect x="19" y="28" width="4.5" height="7" rx="2" fill="#0d2240"/>
+          <rect x="11.5" y="33" width="6" height="3" rx="1.5" fill="#111"/>
+          <rect x="18.5" y="33" width="6" height="3" rx="1.5" fill="#111"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Play button + progress bar -->
+    <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button id="view-play-btn" onclick="viewStartPlay(${currentInst})"
+              style="padding:10px 22px;background:var(--accent);color:#07111e;border:none;border-radius:8px;
+                     font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;
+                     box-shadow:0 2px 10px rgba(232,184,75,.3);transition:.15s">
+        ▶ הפעל סריקה
+      </button>
+      <button id="view-stop-btn" onclick="viewStopPlay()" style="display:none;
+              padding:10px 18px;background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.15);
+              border-radius:8px;font-family:'Heebo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer">
+        ⏹ עצור
+      </button>
+      <div id="view-playbar" style="display:none;flex:1;min-width:120px">
+        <div style="height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden">
+          <div id="view-prog-fill" style="height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));
+               border-radius:99px;width:0%;transition:width .25s"></div>
+        </div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:4px" id="view-prog-lbl"></div>
+      </div>
+    </div>`;
+}
+
+let viewPlayTimer = null;
+
+function viewStartPlay(inst) {
+  const pub = (appData.publishedRoutes || {})[inst];
+  if (!pub || (pub.waypoints||[]).length < 2) return;
+
+  if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
+
+  const wps = pub.waypoints;
+  const g  = document.getElementById('view-guard');
+  const p  = document.getElementById('view-guard-pulse');
+  const pb = document.getElementById('view-playbar');
+  const pf = document.getElementById('view-prog-fill');
+  const pl = document.getElementById('view-prog-lbl');
+  const playBtn = document.getElementById('view-play-btn');
+  const stopBtn = document.getElementById('view-stop-btn');
+  if (!g) return;
+
+  g.style.display  = 'block';
+  p.style.display  = 'block';
+  if (pb) pb.style.display = 'flex';
+  if (playBtn) playBtn.style.display = 'none';
+  if (stopBtn) stopBtn.style.display = 'block';
+
+  const INTERP = 30;
+  const pts = [];
+  for (let i = 0; i < wps.length-1; i++) {
+    for (let t = 0; t < INTERP; t++) {
+      const f = t/INTERP;
+      pts.push({ x: wps[i].x+(wps[i+1].x-wps[i].x)*f, y: wps[i].y+(wps[i+1].y-wps[i].y)*f, wi: i });
+    }
+  }
+  pts.push({...wps[wps.length-1], wi: wps.length-1});
+
+  let idx = 0;
+  const move = () => {
+    const pt = pts[idx];
+    g.style.left = pt.x+'%'; g.style.top = pt.y+'%';
+    p.style.left = pt.x+'%'; p.style.top = pt.y+'%';
+    const ni = Math.min(idx+1, pts.length-1);
+    if (ni !== idx) {
+      const np = pts[ni];
+      const ang = Math.atan2(np.y-pt.y, np.x-pt.x)*180/Math.PI+90;
+      const svg = g.querySelector('svg');
+      if (svg) svg.style.transform = `rotate(${ang}deg)`;
+    }
+    const pct = Math.round(pt.wi/(wps.length-1)*100);
+    if (pf) pf.style.width = pct+'%';
+    if (pl) pl.textContent = `נקודה ${pt.wi+1} / ${wps.length}`;
+  };
+  move();
+
+  viewPlayTimer = setInterval(() => {
+    idx++;
+    if (idx >= pts.length) {
+      clearInterval(viewPlayTimer); viewPlayTimer = null;
+      if (pl) pl.textContent = '✅ הסריקה הושלמה';
+      if (g)  g.style.display = 'none';
+      if (p)  p.style.display = 'none';
+      if (playBtn) { playBtn.textContent = '↺ הפעל שוב'; playBtn.style.display = 'block'; }
+      if (stopBtn) stopBtn.style.display = 'none';
+      return;
+    }
+    move();
+  }, 40);
+}
+
+function viewStopPlay() {
+  if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
+  const g = document.getElementById('view-guard');
+  const p = document.getElementById('view-guard-pulse');
+  const playBtn = document.getElementById('view-play-btn');
+  const stopBtn = document.getElementById('view-stop-btn');
+  const pb = document.getElementById('view-playbar');
+  if (g) g.style.display = 'none';
+  if (p) p.style.display = 'none';
+  if (pb) pb.style.display = 'none';
+  if (playBtn) { playBtn.textContent = '▶ הפעל סריקה'; playBtn.style.display = 'block'; }
+  if (stopBtn) stopBtn.style.display = 'none';
+}
+
+// ── Render: All Procedures (combined) ──
+function renderAllProcs() {
+  const p = appData.procs || {};
+  const r = appData.routine || {};
+
+  const policeItems = [
+    { title: 'נוהל פתיחה באש', url: p.shoot || 'https://www.police.gov.il/menifa/90.222.028.08_1.pdf', fixed: false, fileKey: 'shoot' },
+    { title: 'נוהל לחימה בעת תקרית', url: p.combat, fileKey: 'combat' },
+    { title: 'נוהל הודעה אנונימית', url: p.anon, fileKey: 'anon' },
+    { title: 'חפץ חשוד', url: p.suspect, fileKey: 'suspect' },
+  ];
+  const routineItems = [
+    { title: 'נהלי שגרה — כניסה ויציאה', text: r.r1, fileKey: 'r1file' },
+    { title: 'נהלי שגרה — פיקוח ומעקב', text: r.r2, fileKey: 'r2file' },
+  ];
+
+  let html = '';
+  html += `<div class="proc-section-label">👮 נהלי משטרה</div>`;
+  html += `<div class="proc-list">` + policeItems.map((item,i) => procCard(i+1, item.title, item.url, null, item.fileKey)).join('') + `</div>`;
+  html += `<div class="proc-section-label" style="margin-top:24px">📋 נהלי שגרה</div>`;
+  html += `<div class="proc-list">` + routineItems.map((item,i) => procCard(i+1, item.title, null, item.text, item.fileKey)).join('') + `</div>`;
+
+  document.getElementById('all-procs').innerHTML = html;
+}
+
+function procCard(num, title, url, text, fileKey) {
+  const pf = (appData.procFiles || {})[fileKey] || null;
+  const avail = !!(url || text || pf);
+  const badge = avail
+    ? `<span class="proc-badge ok">זמין</span>`
+    : `<span class="proc-badge pend">ממתין להשלמה</span>`;
+  let body = '';
+  if (pf) {
+    // Uploaded file — open as data URL
+    body = `<p>${escHtml(title)}</p>
+      <a class="proc-link" href="${pf.data}" target="_blank" download="${escHtml(pf.name)}">
+        📎 ${escHtml(pf.name)}
+      </a>`;
+  } else if (url) {
+    body = `<p>${escHtml(title)}</p><a class="proc-link" href="${escHtml(url)}" target="_blank">📄 פתח מסמך PDF</a>`;
+  } else if (text) {
+    body = `<p>${escHtml(text).replace(/\n/g,'<br>')}</p>`;
+  } else {
+    body = `<p style="color:#e07b6f">נוהל זה טרם הועלה למערכת.</p>`;
+  }
+  return `
+    <div class="proc-card" onclick="this.classList.toggle('open')">
+      <div class="proc-head">
+        <div class="proc-head-r">
+          <div class="proc-n">${num}</div>
+          <div class="proc-name">${escHtml(title)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${badge}
+          <span class="proc-chev">▼</span>
+        </div>
+      </div>
+      <div class="proc-body">${body}</div>
+    </div>`;
+}
+
+// ── Render: Phones ──
+function renderPhones() {
+  const ph = appData.phones || {};
+  const instPh = (ph.inst || {})[currentInst] || {};
+  const policeNum = ph['police'] || '100';
+  const rows = [
+    { section: '🚨 חירום', items: [
+      { av:'emerg', icon:'👮', name:'משטרת ישראל', role:'חירום', key:null, fixed: policeNum },
+      { av:'emerg', icon:'🚑', name:'מד"א', role:'חירום רפואי', key:'mada' },
+      { av:'emerg', icon:'🚒', name:'כבאות והצלה', role:'חירום', key:'fire' },
+    ]},
+    { section: '📡 מוקד', items: [
+      { av:'service', icon:'📡', name:'מוקד אשכול', role:'מוקד אזורי', key:'mokad' },
+    ]},
+    { section: '🛡️ קב"טים', items: [
+      { av:'person', icon:'👤', name:'אלדד גד סעד', role:'קב"ט מוסח', key:'eldad' },
+      { av:'person', icon:'👤', name:'מור אמסלם', role:'קב"ט מוסח', key:'mor' },
+      { av:'person', icon:'👤', name:'שלומי ממן', role:'קב"ט מוסח', key:'shlomi' },
+    ]},
+    { section: '🏫 מנהל המוסד', items: [
+      { av:'person', icon:'👔',
+        name: instPh['principal-name'] || 'מנהל המוסד',
+        role: 'מנהל — ' + INSTS[currentInst],
+        key: null, fixed: instPh['principal-phone'] || null },
+    ]},
+    { section: '🔐 רכז ביטחון', items: [
+      { av:'person', icon:'🔐',
+        name: instPh['security-name'] || 'רכז ביטחון',
+        role: 'רכז ביטחון — ' + INSTS[currentInst],
+        key: null, fixed: instPh['security-phone'] || null },
+    ]},
+  ];
+  let html = '<div class="phone-list">';
+  rows.forEach(section => {
+    html += `<div class="phone-section-label">${section.section}</div>`;
+    section.items.forEach(item => {
+      const num = item.fixed || (item.key && ph[item.key]);
+      const numHtml = num
+        ? `<span class="ph-num">${escHtml(num)}</span><a class="call-btn" href="tel:${escHtml(num)}">📞</a>`
+        : `<span class="ph-miss">חסר — בהשלמה</span>`;
+      html += `
+        <div class="phone-row">
+          <div class="ph-left">
+            <div class="ph-av ${item.av}">${item.icon}</div>
+            <div><div class="ph-name">${escHtml(item.name)}</div><div class="ph-role">${escHtml(item.role)}</div></div>
+          </div>
+          <div class="ph-right">${numHtml}</div>
+        </div>`;
+    });
+  });
+  html += '</div>';
+  document.getElementById('phone-content').innerHTML = html;
+}
+
+// ── Admin ──
+function openAdminLogin() {
+  document.getElementById('admin-overlay').classList.add('show');
+  document.getElementById('pass-input').value = '';
+  document.getElementById('pass-err').textContent = '';
+  setTimeout(() => document.getElementById('pass-input').focus(), 100);
+}
+function closeOverlay() { document.getElementById('admin-overlay').classList.remove('show'); }
+
+function getPass() { return localStorage.getItem(PASS_KEY) || DEFAULT_PASS; }
+
+function doLogin() {
+  if (document.getElementById('pass-input').value === getPass()) {
+    closeOverlay();
+    buildAdminUI();
+    showPage('admin-page');
+    if (!isFirebaseConfigured()) document.getElementById('firebase-setup-card').style.display='block';
+  } else {
+    document.getElementById('pass-err').textContent = 'סיסמה שגויה';
+  }
+}
+function doLogout() { showPage('home-page'); }
+
+function buildAdminUI() {
+  const ph = appData.phones || {};
+  ['police','mokad','mada','fire','eldad','mor','shlomi'].forEach(k => {
+    const el = document.getElementById('a-'+k);
+    if (el) el.value = ph[k] || '';
+  });
+  // Build phone institution pills
+  buildPhoneInstPills(0);
+  const p = appData.procs || {};
+  ['shoot','combat','anon','suspect'].forEach(k => {
+    const el = document.getElementById('a-'+k);
+    if (el) el.value = p[k] || '';
+  });
+  const r = appData.routine || {};
+  document.getElementById('a-r1').value = r.r1 || '';
+  document.getElementById('a-r2').value = r.r2 || '';
+
+  // Build map pills
+  const pills = document.getElementById('map-pills');
+  pills.innerHTML = '';
+  INSTS.forEach((name, idx) => {
+    const b = document.createElement('button');
+    b.className = 'i-pill' + (idx===0?' on':'');
+    b.textContent = name;
+    b.onclick = () => {
+      document.querySelectorAll('.i-pill').forEach(p=>p.classList.remove('on'));
+      b.classList.add('on');
+      selMapInst = idx;
+      reLoadForInst(idx);
+    };
+    pills.appendChild(b);
+  });
+  // Show existing file statuses
+  const pf = appData.procFiles || {};
+  ['shoot','combat','anon','suspect','r1file','r2file'].forEach(k => {
+    const el = document.getElementById('fs-'+k);
+    if (el && pf[k]) {
+      el.className = 'proc-file-status ok';
+      el.textContent = `✅ ${pf[k].name} — מצורף`;
+    }
+  });
+  // Load first institution's route after DOM is painted
+  setTimeout(() => reLoadForInst(0), 60);
+}
+
+async function savePhones() {
+  appData.phones = appData.phones || {};
+  // Global fields
+  ['police','mokad','mada','fire','eldad','mor','shlomi'].forEach(k => {
+    const el = document.getElementById('a-'+k);
+    if (el) { const v = el.value.trim(); if (v) appData.phones[k] = v; else delete appData.phones[k]; }
+  });
+  // Per-institution fields (save current selection)
+  phoneInstSave(selPhoneInst);
+  await persist('phones', appData.phones);
+  flash('ok-phones');
+}
+async function saveMap() {
+  appData.maps = appData.maps || {};
+  const url = document.getElementById('a-map-url').value.trim();
+  if (url) appData.maps[selMapInst] = url;
+  await persist('maps', appData.maps);
+  flash('ok-map');
+}
+async function saveProcs() {
+  appData.procs = appData.procs || {};
+  ['shoot','combat','anon','suspect'].forEach(k => {
+    const el = document.getElementById('a-'+k);
+    if (el) { const v = el.value.trim(); if (v) appData.procs[k] = v; }
+  });
+  // procFiles already saved in appData by handleProcFile, just persist urls
+  await persist('procs', appData.procs);
+  saveLocal(); // ensure procFiles saved locally too
+  flash('ok-procs');
+}
+async function saveRoutine() {
+  appData.routine = appData.routine || {};
+  const r1 = document.getElementById('a-r1').value.trim();
+  const r2 = document.getElementById('a-r2').value.trim();
+  if (r1) appData.routine.r1 = r1;
+  if (r2) appData.routine.r2 = r2;
+  await persist('routine', appData.routine);
+  flash('ok-routine');
+}
+function changePass() {
+  const np = document.getElementById('a-newpass').value;
+  if (np.length < 4) { alert('הסיסמה חייבת להיות לפחות 4 תווים'); return; }
+  localStorage.setItem(PASS_KEY, np);
+  document.getElementById('a-newpass').value = '';
+  flash('ok-pass');
+}
+
+async function persist(key, val) {
+  if (isFirebaseConfigured() && window._db) {
+    try { await dbSet('data/' + key, val); } catch(e) { console.warn('Firebase write failed', e); }
+  }
+  saveLocal();
+}
+
+function flash(id) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+
+// ══════════════════════════════════════════
+//  ROUTE EDITOR ENGINE
+// ══════════════════════════════════════════
+let reWaypoints = [];
+let reRedoStack  = [];   // redo history
+let reImageLoaded = false;
+let rePlaying = false;
+let reTimer = null;
+let reInterpPts = [];
+let reInterpIdx = 0;
+let rePlayStep = 0;
+let reStepMs = 600;
+const RE_INTERP = 30;
+
+// Safe DOM getter — runs cb only if element exists
+function reGet(id, cb) {
+  const el = document.getElementById(id);
+  if (el) cb(el);
+}
+
+function reUpload() { document.getElementById('re-file-input').click(); }
+
+function reLoadImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('re-img');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('re-placeholder').classList.add('hidden');
+    reImageLoaded = true;
+    reClear();
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function reEventToPercent(e) {
+  const rect = document.getElementById('re-canvas').getBoundingClientRect();
+  let cx = e.clientX, cy = e.clientY;
+  if (e.changedTouches) { cx = e.changedTouches[0].clientX; cy = e.changedTouches[0].clientY; }
+  return {
+    x: Math.max(0,Math.min(100, (cx-rect.left)/rect.width*100)),
+    y: Math.max(0,Math.min(100, (cy-rect.top)/rect.height*100))
+  };
+}
+
+function reOnClick(e) {
+  if (!reImageLoaded || rePlaying) return;
+  if (e.target.classList.contains('wp-dot')) return;
+  const {x,y} = reEventToPercent(e);
+  reRedoStack = [];  // new point clears redo history
+  reWaypoints.push({x,y});
+  reRenderDots();
+  reRenderRoute();
+  reGet('re-pt-count', el=>el.textContent=reWaypoints.length);
+  reGet('re-redo-btn', el=>el.style.opacity='.4');
+  reAutoSave();
+}
+
+function reOnTouch(e) { e.preventDefault(); reOnClick(e); }
+
+function reOnHover(e) {
+  reGet('re-prev', prev => {
+    if (!reImageLoaded || rePlaying || reWaypoints.length === 0) { prev.setAttribute('display','none'); return; }
+    const {x,y} = reEventToPercent(e);
+    const last = reWaypoints[reWaypoints.length-1];
+    prev.setAttribute('display','block');
+    prev.setAttribute('x1',last.x); prev.setAttribute('y1',last.y);
+    prev.setAttribute('x2',x); prev.setAttribute('y2',y);
+  });
+}
+
+function reRenderDots() {
+  const canvas = document.getElementById('re-canvas');
+  canvas.querySelectorAll('.wp-dot').forEach(d=>d.remove());
+
+  reWaypoints.forEach((pt,i) => {
+    const n   = reWaypoints.length;
+    const isStart = i === 0;
+    const isEnd   = i === n-1 && n > 1;
+    const isMid   = !isStart && !isEnd;
+
+    const dot = document.createElement('div');
+    dot.className = `wp-dot ${isStart?'wp-start':isEnd?'wp-end':'wp-mid'}`;
+    dot.style.left = pt.x+'%';
+    dot.style.top  = pt.y+'%';
+
+    // Label for start / end
+    if (isStart || isEnd) {
+      const lbl = document.createElement('div');
+      lbl.className = 'wp-label ' + (isStart ? 'start-lbl' : 'end-lbl');
+      lbl.textContent = isStart ? '▶ תחילת סריקה' : '⬛ סוף סריקה';
+      dot.appendChild(lbl);
+    }
+
+    // Icon / number inside dot
+    const inner = document.createElement('div');
+    inner.className = 'wp-num';
+    if (isStart)     inner.textContent = '▶';
+    else if (isEnd)  inner.textContent = '■';
+    else             inner.textContent = i;
+    dot.appendChild(inner);
+
+    // Delete X button
+    const del = document.createElement('div');
+    del.className = 'wp-delete';
+    del.textContent = '✕';
+    del.title = 'מחק נקודה';
+    del.addEventListener('mousedown', ev => ev.stopPropagation());
+    del.addEventListener('click', ev => {
+      ev.stopPropagation();
+      reRedoStack = [];
+      reWaypoints.splice(i, 1);
+      reRenderDots(); reRenderRoute();
+      reGet('re-pt-count', el => el.textContent = reWaypoints.length);
+      reAutoSave();
+    });
+    dot.appendChild(del);
+
+    // Keep dblclick as fallback
+    dot.addEventListener('dblclick', ev => {
+      ev.stopPropagation();
+      del.click();
+    });
+
+    reMakeDraggable(dot, i);
+    canvas.appendChild(dot);
+  });
+}
+
+function reMakeDraggable(dot,idx) {
+  let dragging=false;
+  const start = e => { e.stopPropagation(); dragging=true; };
+  const move  = e => {
+    if(!dragging) return; e.preventDefault();
+    const {x,y} = reEventToPercent(e);
+    reWaypoints[idx]={x,y};
+    dot.style.left=x+'%'; dot.style.top=y+'%';
+    reRenderRoute();
+  };
+  const end = () => { if(!dragging) return; dragging=false; reRenderDots(); reRenderRoute(); reAutoSave(); };
+  dot.addEventListener('mousedown',start);
+  dot.addEventListener('touchstart',start,{passive:true});
+  window.addEventListener('mousemove',move);
+  window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('mouseup',end);
+  window.addEventListener('touchend',end);
+}
+
+function reBuildPath(pts) {
+  if(pts.length<2) return '';
+  let d=`M ${pts[0].x} ${pts[0].y}`;
+  for(let i=1;i<pts.length-1;i++){
+    const mx=(pts[i].x+pts[i+1].x)/2, my=(pts[i].y+pts[i+1].y)/2;
+    d+=` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
+  }
+  d+=` L ${pts[pts.length-1].x} ${pts[pts.length-1].y}`;
+  return d;
+}
+
+function reRenderRoute() {
+  const d = reBuildPath(reWaypoints);
+  reGet('re-route', el=>el.setAttribute('d',d));
+  reGet('re-halo',  el=>el.setAttribute('d',d));
+}
+
+function reUndo() {
+  if(reWaypoints.length===0) return;
+  // Push to redo stack before undoing
+  reRedoStack.push(reWaypoints.pop());
+  reRenderDots(); reRenderRoute();
+  reGet('re-pt-count', el=>el.textContent=reWaypoints.length);
+  reGet('re-prev', el=>el.setAttribute('display','none'));
+  reGet('re-redo-btn', el=>el.style.opacity='1');
+  reAutoSave();
+}
+
+function reRedo() {
+  if(reRedoStack.length===0) return;
+  reWaypoints.push(reRedoStack.pop());
+  reRenderDots(); reRenderRoute();
+  reGet('re-pt-count', el=>el.textContent=reWaypoints.length);
+  if(reRedoStack.length===0) reGet('re-redo-btn', el=>el.style.opacity='.4');
+  reAutoSave();
+}
+
+function reClear() {
+  reRedoStack=[];
+  reWaypoints=[];
+  reRenderDots(); reRenderRoute();
+  reGet('re-pt-count', el=>el.textContent=0);
+  reGet('re-prev', el=>el.setAttribute('display','none'));
+  reGet('re-redo-btn', el=>el.style.opacity='.4');
+  reStopPlay();
+  reAutoSave();
+}
+
+function reClearSilent() {
+  reWaypoints=[]; reRedoStack=[]; reImageLoaded=false;
+  reGet('re-canvas',      el => el.querySelectorAll('.wp-dot').forEach(d=>d.remove()));
+  reGet('re-route',       el => el.setAttribute('d',''));
+  reGet('re-halo',        el => el.setAttribute('d',''));
+  reGet('re-pt-count',    el => el.textContent=0);
+  reGet('re-img',         el => { el.src=''; el.style.display='none'; });
+  reGet('re-placeholder', el => el.classList.remove('hidden'));
+}
+
+// Auto-save route (image as base64 + waypoints) to appData
+async function reAutoSave() {
+  if(!currentInst && currentInst!==0) return;
+  appData.routes = appData.routes || {};
+  const img = document.getElementById('re-img');
+  appData.routes[currentInst] = {
+    waypoints: reWaypoints,
+    image: reImageLoaded ? img.src : null
+  };
+  // Only save waypoints to Firebase (image too large — keep local)
+  const routeForFirebase = { waypoints: reWaypoints };
+  if(isFirebaseConfigured() && window._db) {
+    try { await dbSet('data/routes/' + currentInst, routeForFirebase); } catch(e){}
+  }
+  // Save full (with image) to localStorage
+  saveLocal();
+}
+
+// Playback
+function reBuildInterp(pts) {
+  if(pts.length<2) return [];
+  const res=[];
+  for(let i=0;i<pts.length-1;i++){
+    const p1=pts[i],p2=pts[i+1];
+    for(let t=0;t<RE_INTERP;t++){
+      const f=t/RE_INTERP;
+      res.push({x:p1.x+(p2.x-p1.x)*f, y:p1.y+(p2.y-p1.y)*f, wpIdx:i});
+    }
+  }
+  res.push({...pts[pts.length-1], wpIdx:pts.length-1});
+  return res;
+}
+
+function reStartPlay() {
+  if(!reImageLoaded){alert('העלה תמונה תחילה');return;}
+  if(reWaypoints.length<2){alert('סמן לפחות 2 נקודות');return;}
+  rePlaying=true; reInterpIdx=0; rePlayStep=0;
+  reInterpPts=reBuildInterp(reWaypoints);
+  reGet('re-canvas', el=>{ el.querySelectorAll('.wp-dot').forEach(d=>d.style.opacity='.3'); el.classList.add('playing'); });
+  reGet('re-prev',     el=>el.setAttribute('display','none'));
+  reGet('re-guard',    el=>el.style.display='block');
+  reGet('re-pulse',    el=>el.style.display='block');
+  reGet('re-play-btn', el=>el.style.display='none');
+  reGet('re-stop-btn', el=>el.style.display='flex');
+  reGet('re-playbar',  el=>el.style.display='flex');
+  reMoveGuard(reInterpPts[0]);
+  const frameMs = reStepMs/RE_INTERP;
+  reTimer=setInterval(()=>{
+    reInterpIdx++;
+    if(reInterpIdx>=reInterpPts.length){reFinishPlay();return;}
+    reMoveGuard(reInterpPts[reInterpIdx]);
+    const wp=reInterpPts[reInterpIdx].wpIdx;
+    if(wp!==rePlayStep){
+      rePlayStep=wp;
+      reGet('re-step-num', el=>el.textContent=wp+1);
+      reGet('re-step-txt', el=>el.textContent=`נקודה ${wp+1} מתוך ${reWaypoints.length}`);
+      const pct=Math.round(wp/(reWaypoints.length-1)*100);
+      reGet('re-prog-fill',el=>el.style.width=pct+'%');
+      reGet('re-prog-pct', el=>el.textContent=pct+'%');
+      reGet('re-prog-pts', el=>el.textContent=`${wp+1}/${reWaypoints.length}`);
+    }
+  },frameMs);
+}
+
+function reMoveGuard(pt) {
+  const g=document.getElementById('re-guard'), p=document.getElementById('re-pulse');
+  if(!g||!p) return;
+  g.style.left=pt.x+'%'; g.style.top=pt.y+'%';
+  p.style.left=pt.x+'%'; p.style.top=pt.y+'%';
+  const ni=Math.min(reInterpIdx+1,reInterpPts.length-1);
+  if(ni!==reInterpIdx){
+    const np=reInterpPts[ni];
+    const ang=Math.atan2(np.y-pt.y,np.x-pt.x)*180/Math.PI+90;
+    const svg=g.querySelector('svg');
+    if(svg) svg.style.transform=`rotate(${ang}deg)`;
+  }
+}
+
+function reFinishPlay() {
+  clearInterval(reTimer); rePlaying=false;
+  reGet('re-step-num', el => el.textContent=reWaypoints.length);
+  reGet('re-step-txt', el => el.textContent='✅ הסריקה הושלמה!');
+  reGet('re-prog-fill',el => el.style.width='100%');
+  reGet('re-prog-pct', el => el.textContent='100%');
+  reGet('re-play-btn', el => { el.innerHTML='↺ מחדש'; el.style.display='flex'; });
+  reGet('re-stop-btn', el => el.style.display='none');
+  reGet('re-canvas',   el => {
+    el.classList.remove('playing');
+    el.querySelectorAll('.wp-dot').forEach(d=>d.style.opacity='1');
+  });
+}
+
+function reStopPlay() {
+  clearInterval(reTimer); rePlaying=false;
+  reGet('re-guard',   el => el.style.display='none');
+  reGet('re-pulse',   el => el.style.display='none');
+  reGet('re-play-btn',el => { el.innerHTML='▶ תצוגה מקדימה'; el.style.display='flex'; });
+  reGet('re-stop-btn',el => el.style.display='none');
+  reGet('re-playbar', el => el.style.display='none');
+  reGet('re-canvas',  el => {
+    el.classList.remove('playing');
+    el.querySelectorAll('.wp-dot').forEach(d=>d.style.opacity='1');
+  });
+}
+
+function reUpdateSpeed(val) {
+  reGet('re-speed-lbl', el=>el.textContent='×'+val);
+  reStepMs=Math.round(1800/val);
+  if(rePlaying){
+    clearInterval(reTimer);
+    const frameMs=reStepMs/RE_INTERP;
+    reTimer=setInterval(()=>{
+      reInterpIdx++;
+      if(reInterpIdx>=reInterpPts.length){reFinishPlay();return;}
+      reMoveGuard(reInterpPts[reInterpIdx]);
+    },frameMs);
+  }
+}
+
+
+
+// ── Phone per-institution pills ──
+function buildPhoneInstPills(initIdx) {
+  selPhoneInst = initIdx;
+  const container = document.getElementById('phone-inst-pills');
+  if (!container) return;
+  container.innerHTML = '';
+  INSTS.forEach((name, idx) => {
+    const b = document.createElement('button');
+    b.className = 'i-pill' + (idx === initIdx ? ' on' : '');
+    b.textContent = name;
+    b.onclick = () => {
+      // Save current before switching
+      phoneInstSave(selPhoneInst);
+      document.querySelectorAll('#phone-inst-pills .i-pill').forEach(p => p.classList.remove('on'));
+      b.classList.add('on');
+      selPhoneInst = idx;
+      phoneInstLoad(idx);
+    };
+    container.appendChild(b);
+  });
+  phoneInstLoad(initIdx);
+}
+
+function phoneInstLoad(idx) {
+  const instPhones = ((appData.phones || {}).inst || {})[idx] || {};
+  const fields = ['principal-name','principal-phone','security-name','security-phone'];
+  fields.forEach(k => {
+    const el = document.getElementById('a-' + k);
+    if (el) el.value = instPhones[k] || '';
+  });
+}
+
+function phoneInstSave(idx) {
+  appData.phones = appData.phones || {};
+  appData.phones.inst = appData.phones.inst || {};
+  const fields = ['principal-name','principal-phone','security-name','security-phone'];
+  const data = {};
+  fields.forEach(k => {
+    const el = document.getElementById('a-' + k);
+    if (el && el.value.trim()) data[k] = el.value.trim();
+  });
+  appData.phones.inst[idx] = data;
+}
+
+// ── Publish route (admin → public) ──
+async function publishRoute() {
+  if (!reImageLoaded) { alert('העלה תמונה תחילה'); return; }
+  if (reWaypoints.length < 2) { alert('סמן לפחות 2 נקודות לפני פרסום'); return; }
+  appData.publishedRoutes = appData.publishedRoutes || {};
+  const img = document.getElementById('re-img');
+  appData.publishedRoutes[selMapInst] = {
+    waypoints: reWaypoints,
+    image: img.src
+  };
+  // Save waypoints to Firebase (image stays local)
+  if (isFirebaseConfigured() && window._db) {
+    try { await dbSet('data/publishedRoutes/' + selMapInst, { waypoints: reWaypoints }); } catch(e) {}
+  }
+  saveLocal();
+  flash('ok-map');
+}
+
+// ── File upload for procedures ──
+function handleProcFile(key, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('fs-' + key);
+  // Max 5MB
+  if (file.size > 5 * 1024 * 1024) {
+    statusEl.className = 'proc-file-status err';
+    statusEl.textContent = '⚠️ הקובץ גדול מדי (מקסימום 5MB)';
+    return;
+  }
+  statusEl.className = 'proc-file-status';
+  statusEl.textContent = '⏳ טוען קובץ...';
+  const reader = new FileReader();
+  reader.onload = e => {
+    appData.procFiles = appData.procFiles || {};
+    appData.procFiles[key] = {
+      name: file.name,
+      data: e.target.result,  // base64 data URL
+      type: file.type
+    };
+    saveLocal();
+    statusEl.className = 'proc-file-status ok';
+    statusEl.textContent = `✅ ${file.name} — מוכן לשמירה`;
+  };
+  reader.onerror = () => {
+    statusEl.className = 'proc-file-status err';
+    statusEl.textContent = '❌ שגיאה בטעינת הקובץ';
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function reLoadForInst(idx) {
+  // Stop timer without touching DOM (elements may not exist yet)
+  clearInterval(reTimer);
+  rePlaying = false;
+  reInterpIdx = 0;
+
+  reClearSilent();
+
+  const saved = (appData.publishedRoutes || {})[idx] || (appData.routes || {})[idx];
+  if (saved) {
+    reWaypoints = (saved.waypoints || []).map(p => ({x: p.x, y: p.y}));
+    reRedoStack = [];
+    if (saved.image) {
+      reGet('re-img', img => { img.src = saved.image; img.style.display = 'block'; });
+      reGet('re-placeholder', ph => ph.classList.add('hidden'));
+      reImageLoaded = true;
+    }
+    reRenderDots();
+    reRenderRoute();
+    reGet('re-pt-count', el => el.textContent = reWaypoints.length);
+    reGet('re-redo-btn', el => el.style.opacity = '.4');
+  }
+
+  // Reset playback UI safely
+  reGet('re-guard',    el => el.style.display = 'none');
+  reGet('re-pulse',    el => el.style.display = 'none');
+  reGet('re-play-btn', el => { el.innerHTML = '▶ תצוגה מקדימה'; el.style.display = 'flex'; });
+  reGet('re-stop-btn', el => el.style.display = 'none');
+  reGet('re-playbar',  el => el.style.display = 'none');
+  reGet('re-step-num', el => el.textContent = '—');
+  reGet('re-step-txt', el => el.textContent = 'לחץ "תצוגה מקדימה" לבדיקה');
+  reGet('re-prog-fill',el => el.style.width = '0%');
+  reGet('re-prog-pct', el => el.textContent = '0%');
+  reGet('re-prog-pts', el => el.textContent = '0/0');
+  reGet('re-canvas',   el => {
+    el.classList.remove('playing');
+    el.querySelectorAll('.wp-dot').forEach(d => d.style.opacity = '1');
+  });
+  reGet('re-prev', el => el.setAttribute('display', 'none'));
+}
+// ── Utils ──
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', e => {
+  // Only when admin page is visible
+  if (!document.getElementById('admin-page').classList.contains('active')) return;
+  if ((e.ctrlKey||e.metaKey) && e.key==='z') { e.preventDefault(); reUndo(); }
+  if ((e.ctrlKey||e.metaKey) && (e.key==='y'||(e.shiftKey&&e.key==='z'))) { e.preventDefault(); reRedo(); }
+});
+
+// ── URL routing ── ?inst=N opens directly
+window.addEventListener('load', () => {
+  const p = new URLSearchParams(window.location.search);
+  const inst = p.get('inst');
+  if (inst !== null && !isNaN(inst) && +inst >= 0 && +inst < 13) {
+    // wait for data then open
+    const open = () => openInst(+inst);
+    if (!document.getElementById('loading-screen').classList.contains('hidden')) {
+      document.getElementById('loading-screen').addEventListener('transitionend', open, {once:true});
+    } else { open(); }
+  }
+});
+</script>
+</body>
+</html>
