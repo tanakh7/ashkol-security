@@ -19,13 +19,14 @@
 
   // ⬇️ החלף כאן בפרטי Firebase שלך
   const firebaseConfig = {
-    apiKey: "REPLACE_WITH_YOUR_API_KEY",
-    authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
-    databaseURL: "REPLACE_WITH_YOUR_DATABASE_URL",
-    projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-    storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
-    messagingSenderId: "REPLACE_WITH_YOUR_SENDER_ID",
-    appId: "REPLACE_WITH_YOUR_APP_ID"
+    apiKey: "AIzaSyCGFPA79ibYKjOox_kQwog_CuRRclG-zZg",
+    authDomain: "mic222.firebaseapp.com",
+    databaseURL: "https://mic222-default-rtdb.firebaseio.com",
+    projectId: "mic222",
+    storageBucket: "mic222.firebasestorage.app",
+    messagingSenderId: "1076552653566",
+    appId: "1:1076552653566:web:7257163862bf7e2ed123af",
+    measurementId: "G-WS8LMMJTCL"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -245,18 +246,8 @@ body {
 .wp-dot:hover .wp-delete{ display:flex; }
 .wp-delete:hover{ background:#e74c3c; transform:scale(1.2); }
 
-/* ── SETUP BANNER ── */
-#setup-banner {
-  display: none;
-  background: linear-gradient(90deg, #7b3a0a, #a05010);
-  color: #ffe8b0;
-  padding: 10px 20px;
-  font-size: 0.85rem;
-  text-align: center;
-  position: sticky; top: 0; z-index: 200;
-}
-#setup-banner.show { display: block; }
-#setup-banner a { color: #ffe8b0; font-weight: 700; }
+
+
 
 /* ── LOADING ── */
 #loading-screen {
@@ -693,10 +684,7 @@ body {
 </div>
 
 <!-- SETUP BANNER (shown if Firebase not configured) -->
-<div id="setup-banner">
-  ⚠️ Firebase טרם הוגדר — האתר עובד במצב מקומי בלבד.
-  <a href="#" onclick="openAdminLogin();return false;">כנס ללוח הבקרה</a> להוראות הגדרה.
-</div>
+
 
 <!-- ADMIN LOGIN OVERLAY -->
 <div id="admin-overlay">
@@ -1167,7 +1155,7 @@ window.addEventListener('firebase-ready', () => {
   fbReady = true;
   if (!isFirebaseConfigured()) {
     // Firebase not configured — work offline with localStorage
-    document.getElementById('setup-banner').classList.add('show');
+    
     loadFromLocal();
     hideLoading();
     return;
@@ -1185,7 +1173,7 @@ window.addEventListener('firebase-ready', () => {
 // Fallback if Firebase module fails to load
 setTimeout(() => {
   if (!fbReady) {
-    document.getElementById('setup-banner').classList.add('show');
+    
     loadFromLocal();
     hideLoading();
   }
