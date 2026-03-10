@@ -1134,18 +1134,7 @@ body {
       </div>
     </div>
 
-    <!-- Password -->
-    <div class="a-card">
-      <div class="a-card-head">🔐 שינוי סיסמה</div>
-      <div class="a-card-body">
-        <label class="f-label">סיסמה חדשה (לפחות 4 תווים)</label>
-        <input class="f-input" id="a-newpass" type="password" dir="ltr" placeholder="••••••">
-        <div class="f-save-row">
-          <span class="save-ok" id="ok-pass">✓ סיסמה שונתה</span>
-          <button class="btn-gold" onclick="changePass()">שמור סיסמה</button>
-        </div>
-      </div>
-    </div>
+
 
   </div>
 </div>
@@ -1794,18 +1783,7 @@ async function saveRoutine() {
   await persist('routine', appData.routine);
   flash('ok-routine');
 }
-async function changePass() {
-  const np = document.getElementById('a-newpass').value.trim();
-  if (np.length < 4) { alert('הסיסמה חייבת להיות לפחות 4 תווים'); return; }
-  // Save to localStorage
-  localStorage.setItem(PASS_KEY, np);
-  // Save to Firebase so all devices use the new password
-  if (isFirebaseConfigured() && window._db) {
-    try { await dbSet('data/adminPass', np); } catch(e) { console.warn('Firebase pass save failed', e); }
-  }
-  document.getElementById('a-newpass').value = '';
-  flash('ok-pass');
-}
+
 
 async function persist(key, val) {
   if (isFirebaseConfigured() && window._db) {
