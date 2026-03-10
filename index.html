@@ -1095,35 +1095,42 @@ body {
     <div class="a-card">
       <div class="a-card-head">📋 נהלי שגרה</div>
       <div class="a-card-body">
+
         <!-- כניסה ויציאה -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">1. כניסה ויציאה</div>
-          <div class="proc-file-row">
-            <textarea class="f-input" id="a-r1" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
-            <button onclick="addProcUrl('r1file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+          <div class="pf-list" id="ul-r1file"></div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-r1file-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-r1file" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}">
+              <button onclick="addProcUrl('r1file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
               <label class="file-upload-btn">
-              📎 קובץ
-              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r1file',this)">
-            </label>
-            </div><!-- end proc-file-row -->
-          </div><!-- end wrapper -->
+                📎 קובץ
+                <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r1file',this)">
+              </label>
+            </div>
+          </div>
           <div class="pf-list" id="fs-r1file"></div>
         </div>
 
         <!-- פיקוח ומעקב -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">2. פיקוח ומעקב</div>
-          <div class="proc-file-row">
-            <textarea class="f-input" id="a-r2" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
-            <button onclick="addProcUrl('r2file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+          <div class="pf-list" id="ul-r2file"></div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-r2file-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-r2file" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}">
+              <button onclick="addProcUrl('r2file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
               <label class="file-upload-btn">
-              📎 קובץ
-              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r2file',this)">
-            </label>
-            </div><!-- end proc-file-row -->
-          </div><!-- end wrapper -->
+                📎 קובץ
+                <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r2file',this)">
+              </label>
+            </div>
+          </div>
           <div class="pf-list" id="fs-r2file"></div>
         </div>
 
@@ -1493,8 +1500,8 @@ function renderAllProcs() {
     { title: 'חפץ חשוד', url: p.suspect, fileKey: 'suspect' },
   ];
   const routineItems = [
-    { title: 'נהלי שגרה — כניסה ויציאה', text: r.r1, fileKey: 'r1file' },
-    { title: 'נהלי שגרה — פיקוח ומעקב', text: r.r2, fileKey: 'r2file' },
+    { title: 'נהלי שגרה — כניסה ויציאה', url: p.r1file, fileKey: 'r1file' },
+    { title: 'נהלי שגרה — פיקוח ומעקב', url: p.r2file, fileKey: 'r2file' },
   ];
 
   let html = '';
@@ -1775,12 +1782,10 @@ async function saveProcs() {
   flash('ok-procs');
 }
 async function saveRoutine() {
-  appData.routine = appData.routine || {};
-  const r1 = document.getElementById('a-r1').value.trim();
-  const r2 = document.getElementById('a-r2').value.trim();
-  if (r1) appData.routine.r1 = r1;
-  if (r2) appData.routine.r2 = r2;
-  await persist('routine', appData.routine);
+  // URLs are already saved in appData.procs by addProcUrl
+  // Just re-persist to Firebase
+  await persist('procs', appData.procs);
+  saveLocal();
   flash('ok-routine');
 }
 
