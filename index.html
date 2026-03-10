@@ -19,7 +19,7 @@
 
   // ⬇️ החלף כאן בפרטי Firebase שלך
   const firebaseConfig = {
-    apiKey: "",
+    apiKey: "AIzaSyCGFPA79ibYKjOox_kQwog_CuRRclG-zZg",
     authDomain: "mic222.firebaseapp.com",
     databaseURL: "https://mic222-default-rtdb.firebaseio.com",
     projectId: "mic222",
@@ -2066,21 +2066,56 @@ function phoneInstSave(idx) {
   appData.phones.inst[idx] = data;
 }
 
+// ── Compress image to base64 (max ~200KB) ──
+function compressImage(src, maxW, maxH, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      const ratio = Math.min(maxW/w, maxH/h, 1);
+      w = Math.round(w * ratio); h = Math.round(h * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = src;
+  });
+}
+
 // ── Publish route (admin → public) ──
 async function publishRoute() {
   if (!reImageLoaded) { alert('העלה תמונה תחילה'); return; }
   if (reWaypoints.length < 2) { alert('סמן לפחות 2 נקודות לפני פרסום'); return; }
-  appData.publishedRoutes = appData.publishedRoutes || {};
+
+  // Show saving indicator
+  const btn = document.querySelector('[onclick="publishRoute()"]');
+  if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
+
+  // Compress image → max 1200×900, quality 0.7 (~100-200KB)
   const img = document.getElementById('re-img');
+  const compressed = await compressImage(img.src, 1200, 900, 0.7);
+
+  appData.publishedRoutes = appData.publishedRoutes || {};
   appData.publishedRoutes[selMapInst] = {
     waypoints: reWaypoints,
-    image: img.src
+    image: compressed
   };
-  // Save waypoints to Firebase (image stays local)
+
+  // Save to Firebase (with compressed image)
   if (isFirebaseConfigured() && window._db) {
-    try { await dbSet('data/publishedRoutes/' + selMapInst, { waypoints: reWaypoints }); } catch(e) {}
+    try {
+      await dbSet('data/publishedRoutes/' + selMapInst, {
+        waypoints: reWaypoints,
+        image: compressed
+      });
+    } catch(e) {
+      console.error('Firebase save error:', e);
+    }
   }
+
   saveLocal();
+  if (btn) { btn.textContent = '🚀 פרסם מסלול'; btn.disabled = false; }
   flash('ok-map');
 }
 
