@@ -1156,7 +1156,7 @@ const INSTS = [
   'נועם נצרים בנות','תלמוד תורה','ישיבת נווה','אולפנה','רגבים'
 ];
 const PASS_KEY = 'sec_admin_pass';
-const DEFAULT_PASS = '1234';
+const DEFAULT_PASS = '1234'; // fallback only if Firebase unreachable
 
 // In-memory cache (updated by Firebase listener)
 let appData = { phones:{}, maps:{}, procs:{}, routine:{} };
@@ -1637,8 +1637,11 @@ async function syncPassFromFirebase() {
   } catch(e) { console.warn('Could not sync password from Firebase', e); }
 }
 
-function doLogin() {
-  if (document.getElementById('pass-input').value === getPass()) {
+async function doLogin() {
+  // Sync password from Firebase before checking
+  await syncPassFromFirebase();
+  const entered = document.getElementById('pass-input').value;
+  if (entered === getPass()) {
     closeOverlay();
     buildAdminUI();
     showPage('admin-page');
