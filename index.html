@@ -1665,9 +1665,7 @@ function buildAdminUI() {
     const el = document.getElementById('a-'+k);
     if (el) el.value = p[k] || '';
   });
-  const r = appData.routine || {};
-  document.getElementById('a-r1').value = r.r1 || '';
-  document.getElementById('a-r2').value = r.r2 || '';
+  // r1/r2 now use URL lists — rendered by renderAllProcUrlLists()
 
   // Build map pills
   const pills = document.getElementById('map-pills');
