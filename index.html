@@ -2092,9 +2092,13 @@ async function publishRoute() {
   const btn = document.querySelector('[onclick="publishRoute()"]');
   if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
 
-  // Compress image → max 1200×900, quality 0.7 (~100-200KB)
+  // Compress image aggressively → max 800×600, quality 0.5 (~40-80KB)
   const img = document.getElementById('re-img');
-  const compressed = await compressImage(img.src, 1200, 900, 0.7);
+  const compressed = await compressImage(img.src, 800, 600, 0.5);
+
+  // Log size for debugging
+  const sizeKB = Math.round(compressed.length * 0.75 / 1024);
+  console.log('Compressed image size:', sizeKB, 'KB');
 
   appData.publishedRoutes = appData.publishedRoutes || {};
   appData.publishedRoutes[selMapInst] = {
@@ -2102,13 +2106,18 @@ async function publishRoute() {
     image: compressed
   };
 
-  // Save to Firebase (with compressed image)
+  // Save to Firebase
   if (isFirebaseConfigured() && window._db) {
     try {
-      await dbSet('data/publishedRoutes/' + selMapInst, {
-        waypoints: reWaypoints,
-        image: compressed
-      });
+      // Save waypoints first
+      await dbSet('data/publishedRoutes/' + selMapInst + '/waypoints', reWaypoints);
+      // Save image in chunks if needed
+      if (sizeKB < 3000) {
+        await dbSet('data/publishedRoutes/' + selMapInst + '/image', compressed);
+        console.log('Image saved to Firebase OK');
+      } else {
+        console.warn('Image still too large:', sizeKB, 'KB — saving waypoints only');
+      }
     } catch(e) {
       console.error('Firebase save error:', e);
     }
