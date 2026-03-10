@@ -1012,15 +1012,18 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">1. נוהל פתיחה באש</div>
           <div class="pf-list" id="ul-shoot"></div>
-          <div class="proc-file-row" style="margin-top:6px">
-            <input class="f-input" id="a-shoot" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('shoot')}">
-            <button onclick="addProcUrl('shoot')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-shoot-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-shoot" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('shoot')}">
+              <button onclick="addProcUrl('shoot')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('shoot',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-shoot"></div>
         </div>
 
@@ -1028,15 +1031,18 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">2. נוהל לחימה בעת תקרית</div>
           <div class="pf-list" id="ul-combat"></div>
-          <div class="proc-file-row" style="margin-top:6px">
-            <input class="f-input" id="a-combat" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('combat')}">
-            <button onclick="addProcUrl('combat')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-combat-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-combat" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('combat')}">
+              <button onclick="addProcUrl('combat')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('combat',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-combat"></div>
         </div>
 
@@ -1044,15 +1050,18 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">3. נוהל הודעה אנונימית</div>
           <div class="pf-list" id="ul-anon"></div>
-          <div class="proc-file-row" style="margin-top:6px">
-            <input class="f-input" id="a-anon" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('anon')}">
-            <button onclick="addProcUrl('anon')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-anon-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-anon" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('anon')}">
+              <button onclick="addProcUrl('anon')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('anon',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-anon"></div>
         </div>
 
@@ -1060,15 +1069,18 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">4. חפץ חשוד</div>
           <div class="pf-list" id="ul-suspect"></div>
-          <div class="proc-file-row" style="margin-top:6px">
-            <input class="f-input" id="a-suspect" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('suspect')}">
-            <button onclick="addProcUrl('suspect')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px">
+            <div class="proc-file-row">
+              <input class="f-input" id="a-suspect-name" placeholder="שם הקובץ / כותרת" type="text" style="flex:1;margin:0;min-width:100px">
+              <input class="f-input" id="a-suspect" placeholder="https://... קישור" type="url" dir="ltr" style="flex:2;margin:0"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('suspect')}">
+              <button onclick="addProcUrl('suspect')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('suspect',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-suspect"></div>
         </div>
 
@@ -1090,11 +1102,12 @@ body {
             <textarea class="f-input" id="a-r1" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <button onclick="addProcUrl('r1file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r1file',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-r1file"></div>
         </div>
 
@@ -1105,11 +1118,12 @@ body {
             <textarea class="f-input" id="a-r2" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <button onclick="addProcUrl('r2file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
-            <label class="file-upload-btn">
+              <label class="file-upload-btn">
               📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r2file',this)">
             </label>
-          </div>
+            </div><!-- end proc-file-row -->
+          </div><!-- end wrapper -->
           <div class="pf-list" id="fs-r2file"></div>
         </div>
 
@@ -1521,11 +1535,13 @@ function procCard(num, title, url, text, fileKey) {
     if (url) body += `<a class="proc-link" href="${escHtml(url)}" target="_blank" style="display:block;margin-top:5px">📄 פתח קישור נוסף</a>`;
   } else if (url) {
     const urlArr = Array.isArray(url) ? url : [url];
-    const linksHTML = urlArr.map((u,i) => {
-      const isDrive = u.includes('drive.google.com');
-      const label = isDrive ? `📁 פתח ב-Google Drive` : `📄 פתח מסמך ${i+1}`;
-      const href = isDrive ? u : u;
-      return `<a class="proc-link" href="${escHtml(href)}" target="_blank" style="display:block;margin-top:5px">${label}</a>`;
+    const linksHTML = urlArr.map((item, i) => {
+      const u    = (typeof item === 'object') ? item.url  : item;
+      const name = (typeof item === 'object' && item.name) ? item.name :
+                   u.includes('drive.google.com') ? 'Google Drive' :
+                   u.includes('police.gov.il')    ? 'נוהל פתיחה באש' : `מסמך ${i+1}`;
+      const icon = u.includes('drive.google.com') ? '📁' : '📄';
+      return `<a class="proc-link" href="${escHtml(u)}" target="_blank" style="display:block;margin-top:5px">${icon} ${escHtml(name)}</a>`;
     }).join('');
     body = `<p>${escHtml(title)}</p>${linksHTML}`;
   } else if (text) {
@@ -1706,18 +1722,20 @@ function fixGdriveUrl(url) {
 
 function addProcUrl(key) {
   const input = document.getElementById('a-' + key);
+  const nameInput = document.getElementById('a-' + key + '-name');
   if (!input) return;
   const raw = input.value.trim();
   if (!raw) return;
   const url = fixGdriveUrl(raw);
+  const name = nameInput ? nameInput.value.trim() : '';
   appData.procs = appData.procs || {};
   const arr = Array.isArray(appData.procs[key]) ? appData.procs[key] :
-              (appData.procs[key] ? [appData.procs[key]] : []);
-  arr.push(url);
+              (appData.procs[key] ? [{ url: appData.procs[key], name: '' }] : []);
+  arr.push({ url, name });
   appData.procs[key] = arr;
   input.value = '';
+  if (nameInput) nameInput.value = '';
   renderProcUrlList(key);
-  // Auto-save to Firebase
   persist('procs', appData.procs);
   saveLocal();
 }
@@ -1739,13 +1757,17 @@ function renderProcUrlList(key) {
   if (!container) return;
   const raw = (appData.procs || {})[key];
   const arr = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-  container.innerHTML = arr.map((url, i) => {
-    const label = url.includes('drive.google.com') ? '📁 Google Drive' :
-                  url.includes('police.gov.il') ? '👮 משטרת ישראל' : '🔗 קישור';
-    const short = url.length > 55 ? url.substring(0, 55) + '...' : url;
+  container.innerHTML = arr.map((item, i) => {
+    // Support both old string format and new {url, name} format
+    const url  = (typeof item === 'object') ? item.url  : item;
+    const name = (typeof item === 'object' && item.name) ? item.name :
+                 url.includes('drive.google.com') ? 'Google Drive' :
+                 url.includes('police.gov.il')    ? 'נוהל פתיחה באש — משטרת ישראל' : 'מסמך';
+    const icon = url.includes('drive.google.com') ? '📁' :
+                 url.includes('police.gov.il')    ? '👮' : '🔗';
     return `<div class="pf-item">
-      <span style="font-size:.8rem">${label}</span>
-      <span class="pf-item-name" title="${escHtml(url)}">${escHtml(short)}</span>
+      <span style="font-size:.85rem">${icon}</span>
+      <span class="pf-item-name"><strong>${escHtml(name)}</strong></span>
       <button class="pf-del" onclick="deleteProcUrl('${key}',${i})" title="מחק קישור">✕</button>
     </div>`;
   }).join('');
