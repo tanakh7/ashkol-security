@@ -110,6 +110,12 @@ body {
 .proc-file-status { margin-top:5px;font-size:.72rem; }
 .proc-file-status.ok  { color:#3dd678; }
 .proc-file-status.err { color:#e07b6f; }
+.pf-list { display:flex;flex-direction:column;gap:5px;margin-top:6px; }
+.pf-item { display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:5px 10px;font-size:.75rem; }
+.pf-item-name { flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.pf-del { background:none;border:none;color:#e07b6f;cursor:pointer;font-size:.85rem;padding:0 3px;line-height:1; }
+.pf-del:hover { color:#ff6b6b; }
 
 /* ── ROUTE EDITOR ── */
 @keyframes re-pulse-anim {
@@ -1005,11 +1011,11 @@ body {
             <input class="f-input" id="a-shoot" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf">
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('shoot',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('shoot',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-shoot"></div>
+          <div class="pf-list" id="fs-shoot"></div>
         </div>
 
         <!-- נוהל לחימה -->
@@ -1019,11 +1025,11 @@ body {
             <input class="f-input" id="a-combat" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('combat',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('combat',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-combat"></div>
+          <div class="pf-list" id="fs-combat"></div>
         </div>
 
         <!-- נוהל הודעה אנונימית -->
@@ -1033,11 +1039,11 @@ body {
             <input class="f-input" id="a-anon" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('anon',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('anon',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-anon"></div>
+          <div class="pf-list" id="fs-anon"></div>
         </div>
 
         <!-- חפץ חשוד -->
@@ -1047,11 +1053,11 @@ body {
             <input class="f-input" id="a-suspect" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('suspect',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('suspect',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-suspect"></div>
+          <div class="pf-list" id="fs-suspect"></div>
         </div>
 
         <div class="f-save-row" style="margin-top:4px">
@@ -1072,11 +1078,11 @@ body {
             <textarea class="f-input" id="a-r1" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('r1file',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r1file',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-r1file"></div>
+          <div class="pf-list" id="fs-r1file"></div>
         </div>
 
         <!-- פיקוח ומעקב -->
@@ -1086,11 +1092,11 @@ body {
             <textarea class="f-input" id="a-r2" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
             <label class="file-upload-btn">
-              📎 צרף קובץ
-              <input type="file" accept=".pdf,.doc,.docx" onchange="handleProcFile('r2file',this)">
+              📎 צרף קבצים
+              <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r2file',this)">
             </label>
           </div>
-          <div class="proc-file-status" id="fs-r2file"></div>
+          <div class="pf-list" id="fs-r2file"></div>
         </div>
 
         <div class="f-save-row" style="margin-top:4px">
@@ -1151,8 +1157,9 @@ function isFirebaseConfigured() {
 }
 
 // ── Init ──
-window.addEventListener('firebase-ready', () => {
+window.addEventListener('firebase-ready', async () => {
   fbReady = true;
+  await syncPassFromFirebase();
   if (!isFirebaseConfigured()) {
     // Firebase not configured — work offline with localStorage
     
@@ -1474,18 +1481,20 @@ function renderAllProcs() {
 }
 
 function procCard(num, title, url, text, fileKey) {
-  const pf = (appData.procFiles || {})[fileKey] || null;
-  const avail = !!(url || text || pf);
+  const pfRaw = (appData.procFiles || {})[fileKey] || null;
+  const pfArr = pfRaw ? (Array.isArray(pfRaw) ? pfRaw : [pfRaw]) : [];
+  const avail = !!(url || text || pfArr.length);
   const badge = avail
     ? `<span class="proc-badge ok">זמין</span>`
     : `<span class="proc-badge pend">ממתין להשלמה</span>`;
   let body = '';
-  if (pf) {
-    // Uploaded file — open as data URL
-    body = `<p>${escHtml(title)}</p>
-      <a class="proc-link" href="${pf.data}" target="_blank" download="${escHtml(pf.name)}">
-        📎 ${escHtml(pf.name)}
-      </a>`;
+  const filesHTML = pfArr.map(f =>
+    `<a class="proc-link" href="${f.data}" target="_blank" download="${escHtml(f.name)}" style="display:block;margin-top:5px">
+      📎 ${escHtml(f.name)}</a>`
+  ).join('');
+  if (pfArr.length) {
+    body = `<p>${escHtml(title)}</p>${filesHTML}`;
+    if (url) body += `<a class="proc-link" href="${escHtml(url)}" target="_blank" style="display:block;margin-top:5px">📄 פתח קישור נוסף</a>`;
   } else if (url) {
     body = `<p>${escHtml(title)}</p><a class="proc-link" href="${escHtml(url)}" target="_blank">📄 פתח מסמך PDF</a>`;
   } else if (text) {
@@ -1574,6 +1583,17 @@ function closeOverlay() { document.getElementById('admin-overlay').classList.rem
 
 function getPass() { return localStorage.getItem(PASS_KEY) || DEFAULT_PASS; }
 
+async function syncPassFromFirebase() {
+  if (!isFirebaseConfigured() || !window._db) return;
+  try {
+    const snap = await window._dbGet(window._dbRef(window._db, 'data/adminPass'));
+    if (snap.exists()) {
+      const fbPass = snap.val();
+      if (fbPass) localStorage.setItem(PASS_KEY, fbPass);
+    }
+  } catch(e) { console.warn('Could not sync password from Firebase', e); }
+}
+
 function doLogin() {
   if (document.getElementById('pass-input').value === getPass()) {
     closeOverlay();
@@ -1619,14 +1639,7 @@ function buildAdminUI() {
     pills.appendChild(b);
   });
   // Show existing file statuses
-  const pf = appData.procFiles || {};
-  ['shoot','combat','anon','suspect','r1file','r2file'].forEach(k => {
-    const el = document.getElementById('fs-'+k);
-    if (el && pf[k]) {
-      el.className = 'proc-file-status ok';
-      el.textContent = `✅ ${pf[k].name} — מצורף`;
-    }
-  });
+  ['shoot','combat','anon','suspect','r1file','r2file'].forEach(k => renderProcFileList(k));
   // Load first institution's route after DOM is painted
   setTimeout(() => reLoadForInst(0), 60);
 }
@@ -1670,10 +1683,15 @@ async function saveRoutine() {
   await persist('routine', appData.routine);
   flash('ok-routine');
 }
-function changePass() {
-  const np = document.getElementById('a-newpass').value;
+async function changePass() {
+  const np = document.getElementById('a-newpass').value.trim();
   if (np.length < 4) { alert('הסיסמה חייבת להיות לפחות 4 תווים'); return; }
+  // Save to localStorage
   localStorage.setItem(PASS_KEY, np);
+  // Save to Firebase so all devices use the new password
+  if (isFirebaseConfigured() && window._db) {
+    try { await dbSet('data/adminPass', np); } catch(e) { console.warn('Firebase pass save failed', e); }
+  }
   document.getElementById('a-newpass').value = '';
   flash('ok-pass');
 }
@@ -2129,35 +2147,53 @@ async function publishRoute() {
 }
 
 // ── File upload for procedures ──
+function renderProcFileList(key) {
+  const container = document.getElementById('fs-' + key);
+  if (!container) return;
+  const files = (appData.procFiles || {})[key] || [];
+  const arr = Array.isArray(files) ? files : [files]; // backward compat
+  container.innerHTML = arr.map((f, i) => `
+    <div class="pf-item">
+      <span style="font-size:.85rem">📎</span>
+      <span class="pf-item-name">${escHtml(f.name)}</span>
+      <button class="pf-del" onclick="deleteProcFile('${key}',${i})" title="מחק קובץ">✕</button>
+    </div>`).join('');
+}
+
+function deleteProcFile(key, idx) {
+  appData.procFiles = appData.procFiles || {};
+  const arr = Array.isArray(appData.procFiles[key]) ? appData.procFiles[key] : [appData.procFiles[key]].filter(Boolean);
+  arr.splice(idx, 1);
+  if (arr.length === 0) delete appData.procFiles[key];
+  else appData.procFiles[key] = arr;
+  saveLocal();
+  renderProcFileList(key);
+}
+
 function handleProcFile(key, input) {
-  const file = input.files[0];
-  if (!file) return;
-  const statusEl = document.getElementById('fs-' + key);
-  // Max 5MB
-  if (file.size > 5 * 1024 * 1024) {
-    statusEl.className = 'proc-file-status err';
-    statusEl.textContent = '⚠️ הקובץ גדול מדי (מקסימום 5MB)';
-    return;
-  }
-  statusEl.className = 'proc-file-status';
-  statusEl.textContent = '⏳ טוען קובץ...';
-  const reader = new FileReader();
-  reader.onload = e => {
-    appData.procFiles = appData.procFiles || {};
-    appData.procFiles[key] = {
-      name: file.name,
-      data: e.target.result,  // base64 data URL
-      type: file.type
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  appData.procFiles = appData.procFiles || {};
+  const existing = Array.isArray(appData.procFiles[key]) ? appData.procFiles[key] : 
+                   (appData.procFiles[key] ? [appData.procFiles[key]] : []);
+  let loaded = 0;
+  files.forEach(file => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert(`הקובץ ${file.name} גדול מדי (מקסימום 5MB)`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      existing.push({ name: file.name, data: e.target.result, type: file.type });
+      loaded++;
+      if (loaded === files.length) {
+        appData.procFiles[key] = existing;
+        saveLocal();
+        renderProcFileList(key);
+      }
     };
-    saveLocal();
-    statusEl.className = 'proc-file-status ok';
-    statusEl.textContent = `✅ ${file.name} — מוכן לשמירה`;
-  };
-  reader.onerror = () => {
-    statusEl.className = 'proc-file-status err';
-    statusEl.textContent = '❌ שגיאה בטעינת הקובץ';
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+  });
 }
 
 
