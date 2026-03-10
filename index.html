@@ -1002,16 +1002,22 @@ body {
     <div class="a-card">
       <div class="a-card-head">📋 נהלי משטרה</div>
       <div class="a-card-body">
-        <p style="color:var(--muted);font-size:.8rem;margin-bottom:14px">לכל נוהל ניתן להזין קישור PDF <strong>או</strong> לצרף קובץ מהמחשב</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-bottom:6px">לכל נוהל ניתן להזין קישור PDF <strong>או</strong> לצרף קובץ מהמחשב</p>
+        <div style="background:rgba(232,184,75,.08);border:1px solid rgba(232,184,75,.2);border-radius:8px;padding:8px 12px;font-size:.72rem;color:#e8b84b;margin-bottom:14px">
+          💡 <strong>קישור URL</strong> — נשמר ב-Firebase, נגיש מכל מכשיר<br>
+          📎 <strong>קובץ מהמחשב</strong> — נשמר במכשיר זה בלבד. לשיתוף בין מכשירים: העלה ל-Google Drive ← שתף ← הכנס קישור
+        </div>
 
         <!-- נוהל פתיחה באש -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">1. נוהל פתיחה באש</div>
-          <div class="proc-file-row">
-            <input class="f-input" id="a-shoot" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf">
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+          <div class="pf-list" id="ul-shoot"></div>
+          <div class="proc-file-row" style="margin-top:6px">
+            <input class="f-input" id="a-shoot" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0" value="https://www.police.gov.il/menifa/90.222.028.08_1.pdf"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('shoot')}">
+            <button onclick="addProcUrl('shoot')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('shoot',this)">
             </label>
           </div>
@@ -1021,11 +1027,13 @@ body {
         <!-- נוהל לחימה -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">2. נוהל לחימה בעת תקרית</div>
-          <div class="proc-file-row">
-            <input class="f-input" id="a-combat" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+          <div class="pf-list" id="ul-combat"></div>
+          <div class="proc-file-row" style="margin-top:6px">
+            <input class="f-input" id="a-combat" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('combat')}">
+            <button onclick="addProcUrl('combat')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('combat',this)">
             </label>
           </div>
@@ -1035,11 +1043,13 @@ body {
         <!-- נוהל הודעה אנונימית -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">3. נוהל הודעה אנונימית</div>
-          <div class="proc-file-row">
-            <input class="f-input" id="a-anon" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+          <div class="pf-list" id="ul-anon"></div>
+          <div class="proc-file-row" style="margin-top:6px">
+            <input class="f-input" id="a-anon" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('anon')}">
+            <button onclick="addProcUrl('anon')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('anon',this)">
             </label>
           </div>
@@ -1049,11 +1059,13 @@ body {
         <!-- חפץ חשוד -->
         <div class="proc-admin-row">
           <div class="proc-admin-title">4. חפץ חשוד</div>
-          <div class="proc-file-row">
-            <input class="f-input" id="a-suspect" placeholder="https://... (קישור)" type="url" dir="ltr" style="flex:1;margin:0">
-            <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+          <div class="pf-list" id="ul-suspect"></div>
+          <div class="proc-file-row" style="margin-top:6px">
+            <input class="f-input" id="a-suspect" placeholder="https://... הכנס קישור ולחץ +" type="url" dir="ltr" style="flex:1;margin:0"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('suspect')}">
+            <button onclick="addProcUrl('suspect')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('suspect',this)">
             </label>
           </div>
@@ -1075,10 +1087,11 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">1. כניסה ויציאה</div>
           <div class="proc-file-row">
-            <textarea class="f-input" id="a-r1" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
+            <textarea class="f-input" id="a-r1" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r1file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <button onclick="addProcUrl('r1file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r1file',this)">
             </label>
           </div>
@@ -1089,10 +1102,11 @@ body {
         <div class="proc-admin-row">
           <div class="proc-admin-title">2. פיקוח ומעקב</div>
           <div class="proc-file-row">
-            <textarea class="f-input" id="a-r2" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
+            <textarea class="f-input" id="a-r2" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" onkeydown="if(event.key==='Enter'){event.preventDefault();addProcUrl('r2file')}" rows="3" placeholder="הכנס טקסט נוהל..." style="flex:1;margin:0;resize:vertical"></textarea>
             <span style="color:var(--muted);font-size:.75rem;white-space:nowrap">או</span>
+            <button onclick="addProcUrl('r2file')" style="padding:7px 14px;background:var(--accent);color:#07111e;border:none;border-radius:7px;font-weight:700;cursor:pointer;white-space:nowrap">+ הוסף</button>
             <label class="file-upload-btn">
-              📎 צרף קבצים
+              📎 קובץ
               <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleProcFile('r2file',this)">
             </label>
           </div>
@@ -1170,7 +1184,16 @@ window.addEventListener('firebase-ready', async () => {
   // Listen to all data
   dbListen('data', val => {
     if (val) {
+      // Load Firebase data
       appData = { phones:{}, maps:{}, procs:{}, routine:{}, ...val };
+      // Merge local procFiles (they stay local — too large for Firebase)
+      try {
+        const localStr = localStorage.getItem('sec_data');
+        if (localStr) {
+          const local = JSON.parse(localStr);
+          if (local.procFiles) appData.procFiles = local.procFiles;
+        }
+      } catch(e) {}
     }
     hideLoading();
     updateConnStatus(true);
@@ -1483,7 +1506,8 @@ function renderAllProcs() {
 function procCard(num, title, url, text, fileKey) {
   const pfRaw = (appData.procFiles || {})[fileKey] || null;
   const pfArr = pfRaw ? (Array.isArray(pfRaw) ? pfRaw : [pfRaw]) : [];
-  const avail = !!(url || text || pfArr.length);
+  const urlArr2 = Array.isArray(url) ? url : (url ? [url] : []);
+  const avail = !!(urlArr2.length || text || pfArr.length);
   const badge = avail
     ? `<span class="proc-badge ok">זמין</span>`
     : `<span class="proc-badge pend">ממתין להשלמה</span>`;
@@ -1496,7 +1520,14 @@ function procCard(num, title, url, text, fileKey) {
     body = `<p>${escHtml(title)}</p>${filesHTML}`;
     if (url) body += `<a class="proc-link" href="${escHtml(url)}" target="_blank" style="display:block;margin-top:5px">📄 פתח קישור נוסף</a>`;
   } else if (url) {
-    body = `<p>${escHtml(title)}</p><a class="proc-link" href="${escHtml(url)}" target="_blank">📄 פתח מסמך PDF</a>`;
+    const urlArr = Array.isArray(url) ? url : [url];
+    const linksHTML = urlArr.map((u,i) => {
+      const isDrive = u.includes('drive.google.com');
+      const label = isDrive ? `📁 פתח ב-Google Drive` : `📄 פתח מסמך ${i+1}`;
+      const href = isDrive ? u : u;
+      return `<a class="proc-link" href="${escHtml(href)}" target="_blank" style="display:block;margin-top:5px">${label}</a>`;
+    }).join('');
+    body = `<p>${escHtml(title)}</p>${linksHTML}`;
   } else if (text) {
     body = `<p>${escHtml(text).replace(/\n/g,'<br>')}</p>`;
   } else {
@@ -1640,6 +1671,7 @@ function buildAdminUI() {
   });
   // Show existing file statuses
   ['shoot','combat','anon','suspect','r1file','r2file'].forEach(k => renderProcFileList(k));
+  renderAllProcUrlLists();
   // Load first institution's route after DOM is painted
   setTimeout(() => reLoadForInst(0), 60);
 }
@@ -1663,15 +1695,72 @@ async function saveMap() {
   await persist('maps', appData.maps);
   flash('ok-map');
 }
+
+// ── Multi-URL management for procedures ──
+function fixGdriveUrl(url) {
+  // Convert Google Drive share links to direct/preview links
+  const m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  return url;
+}
+
+function addProcUrl(key) {
+  const input = document.getElementById('a-' + key);
+  if (!input) return;
+  const raw = input.value.trim();
+  if (!raw) return;
+  const url = fixGdriveUrl(raw);
+  appData.procs = appData.procs || {};
+  const arr = Array.isArray(appData.procs[key]) ? appData.procs[key] :
+              (appData.procs[key] ? [appData.procs[key]] : []);
+  arr.push(url);
+  appData.procs[key] = arr;
+  input.value = '';
+  renderProcUrlList(key);
+  // Auto-save to Firebase
+  persist('procs', appData.procs);
+  saveLocal();
+}
+
+function deleteProcUrl(key, idx) {
+  appData.procs = appData.procs || {};
+  const arr = Array.isArray(appData.procs[key]) ? appData.procs[key] :
+              (appData.procs[key] ? [appData.procs[key]] : []);
+  arr.splice(idx, 1);
+  if (arr.length === 0) delete appData.procs[key];
+  else appData.procs[key] = arr;
+  renderProcUrlList(key);
+  persist('procs', appData.procs);
+  saveLocal();
+}
+
+function renderProcUrlList(key) {
+  const container = document.getElementById('ul-' + key);
+  if (!container) return;
+  const raw = (appData.procs || {})[key];
+  const arr = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+  container.innerHTML = arr.map((url, i) => {
+    const label = url.includes('drive.google.com') ? '📁 Google Drive' :
+                  url.includes('police.gov.il') ? '👮 משטרת ישראל' : '🔗 קישור';
+    const short = url.length > 55 ? url.substring(0, 55) + '...' : url;
+    return `<div class="pf-item">
+      <span style="font-size:.8rem">${label}</span>
+      <span class="pf-item-name" title="${escHtml(url)}">${escHtml(short)}</span>
+      <button class="pf-del" onclick="deleteProcUrl('${key}',${i})" title="מחק קישור">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function renderAllProcUrlLists() {
+  ['shoot','combat','anon','suspect','r1file','r2file'].forEach(renderProcUrlList);
+}
+
 async function saveProcs() {
   appData.procs = appData.procs || {};
-  ['shoot','combat','anon','suspect'].forEach(k => {
-    const el = document.getElementById('a-'+k);
-    if (el) { const v = el.value.trim(); if (v) appData.procs[k] = v; }
-  });
-  // procFiles already saved in appData by handleProcFile, just persist urls
+  // URLs are already saved in appData.procs[k] as arrays by addProcUrl/deleteProcUrl
+  // Just persist to Firebase
   await persist('procs', appData.procs);
-  saveLocal(); // ensure procFiles saved locally too
+  saveLocal();
   flash('ok-procs');
 }
 async function saveRoutine() {
@@ -2188,8 +2277,20 @@ function handleProcFile(key, input) {
       loaded++;
       if (loaded === files.length) {
         appData.procFiles[key] = existing;
-        saveLocal();
+        saveLocal(); // files stay local only (too large for Firebase)
         renderProcFileList(key);
+        // Show notice that files are local only
+        const container = document.getElementById('fs-' + key);
+        if (container) {
+          const note = container.querySelector('.local-note');
+          if (!note) {
+            const n = document.createElement('div');
+            n.className = 'local-note';
+            n.style.cssText = 'font-size:.65rem;color:var(--muted);margin-top:4px';
+            n.textContent = '💾 הקבצים נשמרו במכשיר זה בלבד — השתמש בקישור URL לשיתוף בין מכשירים';
+            container.appendChild(n);
+          }
+        }
       }
     };
     reader.readAsDataURL(file);
