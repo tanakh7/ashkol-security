@@ -1661,9 +1661,10 @@ function buildAdminUI() {
   // Build phone institution pills
   buildPhoneInstPills(0);
   const p = appData.procs || {};
+  // URL inputs should stay empty (URLs are shown in the list below, not the input)
   ['shoot','combat','anon','suspect'].forEach(k => {
     const el = document.getElementById('a-'+k);
-    if (el) el.value = p[k] || '';
+    if (el) el.value = ''; // clear — URLs shown in ul-{k} list
   });
   // r1/r2 now use URL lists — rendered by renderAllProcUrlLists()
 
