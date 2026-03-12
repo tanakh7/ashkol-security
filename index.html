@@ -1784,9 +1784,9 @@ function deleteProcItemUrl(type, idx, urlIdx) {
  
 // ── Multi-URL management for procedures ──
 function fixGdriveUrl(url) {
-  // Convert Google Drive share links to direct/preview links
-  const m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  // Normalize Google Drive links — keep as /view (opens in new tab)
+  const m = url.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/view?usp=sharing`;
   return url;
 }
  
