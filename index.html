@@ -1849,16 +1849,18 @@ function renderAllProcUrlLists() {
  
 async function saveProcs() {
   appData.procs = appData.procs || {};
-  // URLs are already saved in appData.procs[k] as arrays by addProcUrl/deleteProcUrl
-  // Just persist to Firebase
+  appData.procItems = appData.procItems || {};
+  // Save both procs (legacy URLs) and procItems (dynamic procedures with titles+URLs)
   await persist('procs', appData.procs);
+  await persist('procItems', appData.procItems);
   saveLocal();
   flash('ok-procs');
 }
 async function saveRoutine() {
-  // URLs are already saved in appData.procs by addProcUrl
-  // Just re-persist to Firebase
+  appData.procs = appData.procs || {};
+  appData.procItems = appData.procItems || {};
   await persist('procs', appData.procs);
+  await persist('procItems', appData.procItems);
   saveLocal();
   flash('ok-routine');
 }
@@ -2446,4 +2448,3 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
- 
