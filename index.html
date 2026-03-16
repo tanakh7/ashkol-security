@@ -4,8 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מערכת אבטחה — מוסדות חינוך אשכול</title>
+<meta name="description" content="מערכת אבטחה דיגיטלית למוסדות חינוך במועצה אזורית אשכול — נהלים, מסלולי סריקה וטלפונים חיוניים">
+<meta name="theme-color" content="#08111f">
+<meta property="og:title" content="מערכת אבטחה — אשכול">
+<meta property="og:description" content="נהלי אבטחה, מסלולי סריקה וטלפונים חיוניים למאבטחי מוסדות החינוך">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e8b84b'/><text y='.9em' font-size='72' x='12'>🛡️</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e8b84b'/><text y='.9em' font-size='72' x='12'>🛡️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
+ 
 <!-- ======================================================
      הגדרת FIREBASE
      ======================================================
@@ -16,7 +23,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+ 
   // ⬇️ החלף כאן בפרטי Firebase שלך
   const firebaseConfig = {
     apiKey: "AIzaSyCGFPA79ibYKjOox_kQwog_CuRRclG-zZg",
@@ -28,10 +35,10 @@
     appId: "1:1076552653566:web:7257163862bf7e2ed123af",
     measurementId: "G-WS8LMMJTCL"
   };
-
+ 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
+ 
   // expose to global scope so non-module scripts can use
   window._db = db;
   window._dbRef = ref;
@@ -41,7 +48,7 @@
   window._firebaseReady = true;
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
-
+ 
 <style>
 :root {
   --bg: #08111f;
@@ -65,10 +72,10 @@ body {
   min-height: 100vh;
   direction: rtl;
 }
-
-
-
-
+ 
+ 
+ 
+ 
 /* ── PHONE ADMIN ROWS ── */
 .ph-admin-section {
   font-size:.72rem;font-weight:700;color:var(--accent);
@@ -92,7 +99,7 @@ body {
   padding:6px 10px;background:rgba(255,255,255,.04);
   border-radius:6px;border:1px solid rgba(255,255,255,.07);flex:1;
 }
-
+ 
 /* ── ADMIN PROC FILE UPLOAD ── */
 .proc-admin-row { margin-bottom:16px; }
 .proc-admin-title { font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:7px; }
@@ -116,7 +123,7 @@ body {
 .pf-item-name { flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
 .pf-del { background:none;border:none;color:#e07b6f;cursor:pointer;font-size:.85rem;padding:0 3px;line-height:1; }
 .pf-del:hover { color:#ff6b6b; }
-
+ 
 /* ── ROUTE EDITOR ── */
 @keyframes re-pulse-anim {
   0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}
@@ -186,7 +193,7 @@ body {
 }
 .wp-dot:hover { transform:translate(-50%,-50%) scale(1.2); }
 .wp-dot:active{ cursor:grabbing; transform:translate(-50%,-50%) scale(1.1); }
-
+ 
 /* START — gold flag, bigger */
 .wp-dot.wp-start{
   width:32px;height:32px;
@@ -197,7 +204,7 @@ body {
   z-index:35;
 }
 .wp-dot.wp-start:hover{ transform:translate(-50%,-100%) scale(1.15); }
-
+ 
 /* END — green flag, bigger */
 .wp-dot.wp-end{
   width:32px;height:32px;
@@ -208,14 +215,14 @@ body {
   z-index:35;
 }
 .wp-dot.wp-end:hover{ transform:translate(-50%,-100%) scale(1.15); }
-
+ 
 /* MID — blue circle */
 .wp-dot.wp-mid{
   width:13px;height:13px;
   background:#4a8fd4;
   box-shadow:0 0 0 2px rgba(74,143,212,.35), 0 2px 6px rgba(0,0,0,.5);
 }
-
+ 
 /* Labels on start/end */
 .wp-label{
   position:absolute;
@@ -233,9 +240,9 @@ body {
 }
 .wp-label.start-lbl{ color:#f0c040; border-color:rgba(240,192,64,.3); }
 .wp-label.end-lbl  { color:#2ecc71; border-color:rgba(46,204,113,.3); }
-
+ 
 .wp-num{font-size:.55rem;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none;line-height:1}
-
+ 
 /* Delete X button (appears on hover) */
 .wp-delete{
   position:absolute;
@@ -251,10 +258,10 @@ body {
 }
 .wp-dot:hover .wp-delete{ display:flex; }
 .wp-delete:hover{ background:#e74c3c; transform:scale(1.2); }
-
-
-
-
+ 
+ 
+ 
+ 
 /* ── LOADING ── */
 #loading-screen {
   position: fixed; inset: 0;
@@ -274,12 +281,12 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loader-text { color: var(--muted); font-size: 0.9rem; }
-
+ 
 /* ── PAGES ── */
 .page { display: none; animation: fadeIn 0.3s ease; }
 .page.active { display: block; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-
+ 
 /* ── TOP BAR ── */
 .top-bar {
   display: flex; align-items: center; justify-content: space-between;
@@ -311,7 +318,7 @@ body {
   transition: 0.2s;
 }
 .admin-trigger:hover { color: var(--accent); border-color: var(--accent); }
-
+ 
 /* ── HOME ── */
 #home-page {
   background:
@@ -338,7 +345,7 @@ body {
 }
 .hero h1 em { font-style: normal; color: var(--accent); }
 .hero p { color: var(--muted); font-size: 0.9rem; }
-
+ 
 /* connection status */
 .conn-status {
   display: inline-flex; align-items: center; gap: 6px;
@@ -350,7 +357,7 @@ body {
 .conn-status.online { background: rgba(26,107,58,0.15); color: #5dd98a; }
 .conn-status.offline { background: rgba(192,57,43,0.15); color: #e07b6f; }
 .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-
+ 
 .inst-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
@@ -379,10 +386,12 @@ body {
 }
 .inst-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); border-color: rgba(232,184,75,0.4); background: var(--card-hover); }
 .inst-card:hover::after { transform: scaleX(1); }
+.inst-card:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.inst-card:focus::after { transform: scaleX(1); }
 .inst-icon { font-size: 1.7rem; margin-bottom: 8px; }
 .inst-name { font-size: 0.87rem; font-weight: 600; line-height: 1.3; }
 .inst-cta { margin-top: 8px; font-size: 0.72rem; color: var(--accent); opacity: 0.7; }
-
+ 
 /* ── INSTITUTION PAGE ── */
 .inst-header {
   background: linear-gradient(135deg, var(--surface2) 0%, var(--blue) 100%);
@@ -400,7 +409,7 @@ body {
 .back-btn:hover { color: var(--accent); }
 .inst-page-title { font-size: 1.5rem; font-weight: 900; }
 .inst-page-sub { color: var(--accent); font-size: 0.8rem; margin-top: 3px; }
-
+ 
 /* tabs */
 .tabs {
   display: flex;
@@ -421,10 +430,10 @@ body {
 .tab .ti { font-size: 1rem; display: block; margin-bottom: 3px; }
 .tab:hover { color: var(--text); }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
+ 
 .tab-content { display: none; padding: 20px 16px; }
 .tab-content.active { display: block; animation: fadeIn 0.25s ease; }
-
+ 
 /* map tab */
 .map-open-btn {
   display: flex; align-items: center; gap: 10px;
@@ -456,7 +465,7 @@ body {
 .map-placeholder p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 .map-placeholder .mp-name { color: var(--text); font-weight: 700; }
 .map-placeholder .mp-hint { color: var(--accent); font-size: 0.8rem; margin-top: 10px; }
-
+ 
 .proc-section-label {
   font-size: 0.78rem; font-weight: 700;
   color: var(--accent); letter-spacing: 0.06em;
@@ -505,7 +514,7 @@ body {
   transition: 0.2s;
 }
 .proc-link:hover { border-color: var(--accent); }
-
+ 
 /* phone list */
 .phone-section-label {
   font-size: 0.7rem; font-weight: 700;
@@ -546,7 +555,7 @@ body {
   flex-shrink: 0;
 }
 .call-btn:hover { background: rgba(26,107,58,0.5); }
-
+ 
 /* ── ADMIN OVERLAY ── */
 #admin-overlay {
   display: none; position: fixed; inset: 0;
@@ -596,7 +605,7 @@ body {
   transition: 0.2s;
 }
 .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
-
+ 
 /* ── ADMIN PAGE ── */
 #admin-page { min-height: 100vh; padding-bottom: 60px; }
 .admin-topbar {
@@ -657,7 +666,7 @@ body {
   font-family: 'Heebo', sans-serif;
 }
 .i-pill.on { background: rgba(232,184,75,0.12); border-color: var(--accent); color: var(--accent); }
-
+ 
 /* firebase setup helper */
 .setup-steps {
   background: rgba(30,64,128,0.15);
@@ -674,19 +683,19 @@ body {
 }
 .setup-steps li strong { color: var(--text); }
 .setup-steps a { color: var(--accent); }
-
+ 
 @media (max-width: 420px) {
   .hero h1 { font-size: 1.65rem; }
   .inst-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
+ 
 /* ── DESKTOP (768px+) ── */
 @media (min-width: 768px) {
-
+ 
   /* ── Top bar ── */
   .top-bar { padding: 16px 48px; }
   .logo-text { font-size: 1.05rem; }
-
+ 
   /* ── Institution page header ── */
   .inst-header {
     padding: 20px 48px 22px;
@@ -697,19 +706,19 @@ body {
   .inst-header .back-btn { margin-bottom: 0; }
   .inst-page-title { font-size: 2rem; }
   .inst-page-sub { font-size: 0.88rem; }
-
+ 
   /* ── Tabs ── */
   .tabs { padding: 0 48px; }
   .tab { font-size: 0.92rem; padding: 16px 20px; }
   .tab .ti { font-size: 1.2rem; }
-
+ 
   /* ── Tab content — centered column ── */
   .tab-content {
     max-width: 820px;
     margin: 0 auto;
     padding: 28px 0 48px;
   }
-
+ 
   /* ── Phone rows ── */
   .phone-row { padding: 16px 20px; border-radius: 13px; }
   .ph-av { width: 44px; height: 44px; font-size: 1.2rem; }
@@ -717,15 +726,15 @@ body {
   .ph-role { font-size: 0.8rem; }
   .ph-num { font-size: 1.1rem; }
   .call-btn { width: 40px; height: 40px; font-size: 1.1rem; }
-
+ 
   /* ── Procedure cards ── */
   .proc-card { border-radius: 13px; }
   .proc-head { padding: 15px 18px; }
   .proc-name { font-size: 1rem; }
-
+ 
   /* ── Route map — full height ── */
   .route-map-wrap { height: calc(100vh - 180px); }
-
+ 
   /* ── Admin page — narrow centered column ── */
   .admin-topbar { padding: 18px 48px; }
   .admin-topbar h1 { font-size: 1.4rem; }
@@ -739,7 +748,7 @@ body {
   .proc-file-row { flex-wrap: nowrap; }
   .f-input { font-size: 0.92rem; }
 }
-
+ 
 /* ── LARGE DESKTOP (1200px+) ── */
 @media (min-width: 1200px) {
   .top-bar { padding: 18px 72px; }
@@ -753,16 +762,16 @@ body {
 </style>
 </head>
 <body>
-
+ 
 <!-- LOADING -->
 <div id="loading-screen">
   <div class="loader-ring"></div>
   <div class="loader-text">טוען נתונים...</div>
 </div>
-
+ 
 <!-- SETUP BANNER (shown if Firebase not configured) -->
-
-
+ 
+ 
 <!-- ADMIN LOGIN OVERLAY -->
 <div id="admin-overlay">
   <div class="admin-modal">
@@ -777,13 +786,13 @@ body {
     </div>
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════════════════
      HOME PAGE
 ══════════════════════════════════════════ -->
 <div id="home-page" class="page active">
   <div class="top-bar">
-    <div class="logo">
+    <div class="logo" onclick="goHome()" style="cursor:pointer" title="חזרה לדף הבית">
       <div class="logo-badge">🛡️</div>
       <div>
         <div class="logo-text">מערכת אבטחה</div>
@@ -792,7 +801,7 @@ body {
     </div>
     <button class="admin-trigger" onclick="openAdminLogin()">⚙️ ניהול</button>
   </div>
-
+ 
   <div class="hero">
     <div class="hero-pill">🏫 13 מוסדות חינוך</div>
     <h1>בחר <em>מוסד חינוכי</em></h1>
@@ -802,24 +811,24 @@ body {
       <span id="conn-text">מתחבר...</span>
     </div>
   </div>
-
+ 
   <div class="inst-grid">
-    <div class="inst-card" onclick="openInst(0)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור קדמי</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(1)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור אחורי</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(2)"><div class="inst-icon">🏫</div><div class="inst-name">מרחבי אשכול</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(3)"><div class="inst-icon">🌾</div><div class="inst-name">שדות אשכול</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(4)"><div class="inst-icon">🌅</div><div class="inst-name">שחר אשכול</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(5)"><div class="inst-icon">☀️</div><div class="inst-name">שמש אשכול</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(6)"><div class="inst-icon">📚</div><div class="inst-name">בית ספר בנות</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(7)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנים</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(8)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנות</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(9)"><div class="inst-icon">📖</div><div class="inst-name">תלמוד תורה</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(10)"><div class="inst-icon">🌿</div><div class="inst-name">ישיבת נווה</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(11)"><div class="inst-icon">✡️</div><div class="inst-name">אולפנה</div><div class="inst-cta">← פתח</div></div>
-    <div class="inst-card" onclick="openInst(12)"><div class="inst-icon">🌱</div><div class="inst-name">רגבים</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(0)" tabindex="0" role="button" aria-label="פתח נופי הבשור קדמי" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(0)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור קדמי</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(1)" tabindex="0" role="button" aria-label="פתח נופי הבשור אחורי" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(1)"><div class="inst-icon">🏘️</div><div class="inst-name">נופי הבשור אחורי</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(2)" tabindex="0" role="button" aria-label="פתח מרחבי אשכול" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(2)"><div class="inst-icon">🏫</div><div class="inst-name">מרחבי אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(3)" tabindex="0" role="button" aria-label="פתח שדות אשכול" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(3)"><div class="inst-icon">🌾</div><div class="inst-name">שדות אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(4)" tabindex="0" role="button" aria-label="פתח שחר אשכול" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(4)"><div class="inst-icon">🌅</div><div class="inst-name">שחר אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(5)" tabindex="0" role="button" aria-label="פתח שמש אשכול" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(5)"><div class="inst-icon">☀️</div><div class="inst-name">שמש אשכול</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(6)" tabindex="0" role="button" aria-label="פתח בית ספר בנות" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(6)"><div class="inst-icon">📚</div><div class="inst-name">בית ספר בנות</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(7)" tabindex="0" role="button" aria-label="פתח נועם נצרים בנים" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(7)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנים</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(8)" tabindex="0" role="button" aria-label="פתח נועם נצרים בנות" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(8)"><div class="inst-icon">🕍</div><div class="inst-name">נועם נצרים בנות</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(9)" tabindex="0" role="button" aria-label="פתח תלמוד תורה" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(9)"><div class="inst-icon">📖</div><div class="inst-name">תלמוד תורה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(10)" tabindex="0" role="button" aria-label="פתח ישיבת נווה" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(10)"><div class="inst-icon">🌿</div><div class="inst-name">ישיבת נווה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(11)" tabindex="0" role="button" aria-label="פתח אולפנה" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(11)"><div class="inst-icon">✡️</div><div class="inst-name">אולפנה</div><div class="inst-cta">← פתח</div></div>
+    <div class="inst-card" onclick="openInst(12)" tabindex="0" role="button" aria-label="פתח רגבים" onkeydown="if(event.key==='Enter'||event.key===' ')openInst(12)"><div class="inst-icon">🌱</div><div class="inst-name">רגבים</div><div class="inst-cta">← פתח</div></div>
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════════════════
      INSTITUTION PAGE
 ══════════════════════════════════════════ -->
@@ -829,35 +838,35 @@ body {
     <div class="inst-page-title" id="inst-title">—</div>
     <div class="inst-page-sub">מועצה אזורית אשכול — מערכת אבטחה</div>
   </div>
-
+ 
   <div class="tabs">
     <div class="tab active" onclick="switchTab(0)"><span class="ti">🗺️</span>מסלול סריקה</div>
     <div class="tab" onclick="switchTab(1)"><span class="ti">📋</span>נהלים</div>
     <div class="tab" onclick="switchTab(2)"><span class="ti">📢</span>דבר קב"ט</div>
     <div class="tab" onclick="switchTab(3)"><span class="ti">📞</span>טלפונים</div>
   </div>
-
+ 
   <!-- TAB 0: ROUTE VIEW (read-only, published by admin) -->
   <div class="tab-content active" id="tc-0">
     <div id="map-content"></div>
   </div>
-
+ 
     <!-- TAB 1: PROCEDURES (police + routine combined) -->
   <div class="tab-content" id="tc-1">
     <div id="all-procs"></div>
   </div>
-
+ 
   <!-- TAB 2: דבר קב"ט והוראות השעה -->
   <div class="tab-content" id="tc-2">
     <div id="commander-content"></div>
   </div>
-
+ 
   <!-- TAB 3: PHONES -->
   <div class="tab-content" id="tc-3">
     <div id="phone-content"></div>
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════════════════
      ADMIN PAGE
 ══════════════════════════════════════════ -->
@@ -869,9 +878,9 @@ body {
     </div>
     <button class="btn-danger" onclick="doLogout()">יציאה</button>
   </div>
-
+ 
   <div class="admin-body">
-
+ 
     <!-- Firebase setup helper -->
     <div class="a-card" id="firebase-setup-card" style="display:none">
       <div class="a-card-head">🔧 הגדרת Firebase (חובה)</div>
@@ -892,12 +901,12 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <!-- Phones -->
     <div class="a-card">
       <div class="a-card-head">📞 טלפונים</div>
       <div class="a-card-body">
-
+ 
         <!-- ── חירום ומוקד (כלל-מועצה) ── -->
         <div class="ph-admin-section">🚨 חירום ומוקד — כלל המועצה</div>
         <div class="ph-admin-row">
@@ -916,7 +925,7 @@ body {
           <label class="ph-admin-label">📡 מוקד אשכול</label>
           <input class="f-input ph-admin-input" id="a-mokad" placeholder="מספר טלפון" type="tel" dir="ltr">
         </div>
-
+ 
         <!-- ── קב"טים (כלל-מועצה) ── -->
         <div class="ph-admin-section">🛡️ קב"טים — כלל המועצה</div>
         <div class="ph-admin-row">
@@ -931,12 +940,12 @@ body {
           <label class="ph-admin-label">👤 שלומי ממן</label>
           <input class="f-input ph-admin-input" id="a-shlomi" placeholder="מספר טלפון" type="tel" dir="ltr">
         </div>
-
+ 
         <!-- ── מנהל ורכז — לפי מוסד ── -->
         <div class="ph-admin-section">🏫 מנהל ורכז ביטחון — לפי מוסד</div>
         <label class="f-label" style="margin-bottom:6px">בחר מוסד לעריכה</label>
         <div class="inst-pills" id="phone-inst-pills"></div>
-
+ 
         <div id="inst-phone-editor" style="margin-top:12px">
           <div class="ph-admin-row">
             <label class="ph-admin-label">👔 שם מנהל</label>
@@ -955,14 +964,14 @@ body {
             <input class="f-input ph-admin-input" id="a-security-phone" placeholder="מספר טלפון" type="tel" dir="ltr">
           </div>
         </div>
-
+ 
         <div class="f-save-row" style="margin-top:10px">
           <span class="save-ok" id="ok-phones">✓ נשמר</span>
           <button class="btn-gold" onclick="savePhones()">שמור טלפונים</button>
         </div>
       </div>
     </div>
-
+ 
     <!-- Maps / Route Editor (admin only) -->
     <div class="a-card">
       <div class="a-card-head">🗺️ מסלולי סריקה</div>
@@ -1074,7 +1083,7 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <!-- Procedures — Dynamic -->
     <div class="a-card">
       <div class="a-card-head">👮 נהלי משטרה
@@ -1088,7 +1097,7 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <div class="a-card">
       <div class="a-card-head">📋 נהלי שגרה
         <button onclick="addProcItem('routine')" style="margin-right:auto;padding:4px 12px;background:var(--accent);color:#07111e;border:none;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer">+ הוסף נוהל</button>
@@ -1101,7 +1110,7 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <!-- Education Procedures -->
     <div class="a-card">
       <div class="a-card-head">🎓 נהלי משרד החינוך
@@ -1115,12 +1124,12 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <!-- Commander messages -->
     <div class="a-card">
       <div class="a-card-head">📢 דבר קב"ט והוראות השעה</div>
       <div class="a-card-body">
-
+ 
         <!-- Free text block -->
         <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.07)">
           <label class="f-label" style="font-size:.82rem;font-weight:700;color:var(--accent);margin-bottom:8px;display:block">
@@ -1136,7 +1145,7 @@ body {
             <button class="btn-gold" onclick="saveCommanderText()">💾 שמור הודעת טקסט</button>
           </div>
         </div>
-
+ 
         <!-- Timed messages -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <label class="f-label" style="font-size:.82rem;font-weight:700;color:var(--accent);margin:0">
@@ -1150,11 +1159,11 @@ body {
         </div>
       </div>
     </div>
-
+ 
   </div>
 </div>
 </div>
-
+ 
 <!-- ══════════════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════════════ -->
@@ -1165,11 +1174,11 @@ const INSTS = [
   'נועם נצרים בנות','תלמוד תורה','ישיבת נווה','אולפנה','רגבים'
 ];
 const PASS_KEY = 'sec_admin_pass';
-const DEFAULT_PASS = '1234'; // fallback only if Firebase unreachable
-
+const DEFAULT_PASS = ''; // no hardcoded fallback — always sync from Firebase
+ 
 // In-memory cache (updated by Firebase listener)
 let appData = { phones:{}, maps:{}, procs:{}, procItems:{}, commanderMsgs:[], commanderText:'' };
-
+ 
 const DEFAULT_POLICE_PROCS = [
   { title: 'נוהל פתיחה באש',        key: 'shoot'   },
   { title: 'נוהל לחימה בעת תקרית', key: 'combat'  },
@@ -1184,18 +1193,18 @@ const DEFAULT_EDUCATION_PROCS = [
   { title: 'נוהל חירום — משרד החינוך', key: 'edu1' },
   { title: 'נוהל פינוי תלמידים', key: 'edu2' },
 ];
-
+ 
 let fbReady = false;
 let currentInst = 0;
 let selMapInst  = 0;
 let selPhoneInst = 0;
-
+ 
 // ── Firebase helpers ──
 function dbRef(path) { return window._dbRef(window._db, path); }
 function dbSet(path, val) { return window._dbSet(dbRef(path), val); }
 function dbGet(path) { return window._dbGet(dbRef(path)); }
 function dbListen(path, cb) { window._dbOnValue(dbRef(path), snap => cb(snap.val())); }
-
+ 
 function isFirebaseConfigured() {
   // Check if the placeholder values are still there
   try {
@@ -1204,7 +1213,7 @@ function isFirebaseConfigured() {
     return !el.textContent.includes('REPLACE_WITH_YOUR_API_KEY');
   } catch(e) { return false; }
 }
-
+ 
 // ── Init ──
 window.addEventListener('firebase-ready', async () => {
   fbReady = true;
@@ -1234,7 +1243,7 @@ window.addEventListener('firebase-ready', async () => {
     updateConnStatus(true);
   });
 });
-
+ 
 // Fallback if Firebase module fails to load
 setTimeout(() => {
   if (!fbReady) {
@@ -1243,7 +1252,7 @@ setTimeout(() => {
     hideLoading();
   }
 }, 3000);
-
+ 
 function loadFromLocal() {
   try {
     const s = localStorage.getItem('sec_data');
@@ -1253,20 +1262,20 @@ function loadFromLocal() {
 function saveLocal() {
   try { localStorage.setItem('sec_data', JSON.stringify(appData)); } catch(e) {}
 }
-
+ 
 function hideLoading() {
   const l = document.getElementById('loading-screen');
   l.classList.add('hidden');
   setTimeout(() => l.style.display='none', 500);
 }
-
+ 
 function updateConnStatus(online) {
   const el = document.getElementById('conn-indicator');
   const txt = document.getElementById('conn-text');
   el.className = 'conn-status ' + (online ? 'online' : 'offline');
   txt.textContent = online ? 'מחובר — נתונים מעודכנים' : 'לא מחובר';
 }
-
+ 
 // ── Navigation ──
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1274,14 +1283,14 @@ function showPage(id) {
   window.scrollTo(0,0);
 }
 function goHome() { showPage('home-page'); }
-
+ 
 function openInst(idx) {
   currentInst = idx;
   document.getElementById('inst-title').textContent = INSTS[idx];
   switchTab(0);
   showPage('inst-page');
 }
-
+ 
 function switchTab(idx) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
   document.querySelectorAll('.tab-content').forEach((c,i) => c.classList.toggle('active', i===idx));
@@ -1290,7 +1299,7 @@ function switchTab(idx) {
   if (idx===2) renderCommander();
   if (idx===3) renderPhones();
 }
-
+ 
 // ── Render: Map (view-only published route) ──
 function renderMap() {
   if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
@@ -1305,7 +1314,7 @@ function renderMap() {
       </div>`;
     return;
   }
-
+ 
   const wps = pub.waypoints || [];
   // Build smooth curved path (same as editor)
   function buildViewPath(pts) {
@@ -1319,7 +1328,7 @@ function renderMap() {
     return d;
   }
   const pathD = buildViewPath(wps);
-
+ 
   // Build waypoint markers HTML (start, mid, end)
   let wpMarkersHTML = '';
   wps.forEach((pt, i) => {
@@ -1361,11 +1370,11 @@ function renderMap() {
         </div>`;
     }
   });
-
+ 
   el.innerHTML = `
     <div style="position:relative;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.5)">
       <img src="${pub.image}" alt="מסלול סריקה" style="width:100%;display:block">
-
+ 
       <!-- Route SVG -->
       <svg style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"
            viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1380,10 +1389,10 @@ function renderMap() {
               stroke-linecap="round" stroke-linejoin="round"
               filter="url(#vg)" marker-mid="url(#va)" opacity=".94"/>
       </svg>
-
+ 
       <!-- Waypoint markers (start/mid/end) -->
       ${wpMarkersHTML}
-
+ 
       <!-- Guard (hidden until play) -->
       <div id="view-guard-pulse" style="display:none;position:absolute;width:44px;height:44px;border-radius:50%;
            background:radial-gradient(circle,rgba(232,184,75,.5) 0%,transparent 70%);
@@ -1409,7 +1418,7 @@ function renderMap() {
         </svg>
       </div>
     </div>
-
+ 
     <!-- Play button + progress bar -->
     <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <button id="view-play-btn" onclick="viewStartPlay(${currentInst})"
@@ -1432,15 +1441,15 @@ function renderMap() {
       </div>
     </div>`;
 }
-
+ 
 let viewPlayTimer = null;
-
+ 
 function viewStartPlay(inst) {
   const pub = (appData.publishedRoutes || {})[inst];
   if (!pub || (pub.waypoints||[]).length < 2) return;
-
+ 
   if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
-
+ 
   const wps = pub.waypoints;
   const g  = document.getElementById('view-guard');
   const p  = document.getElementById('view-guard-pulse');
@@ -1450,13 +1459,13 @@ function viewStartPlay(inst) {
   const playBtn = document.getElementById('view-play-btn');
   const stopBtn = document.getElementById('view-stop-btn');
   if (!g) return;
-
+ 
   g.style.display  = 'block';
   p.style.display  = 'block';
   if (pb) pb.style.display = 'flex';
   if (playBtn) playBtn.style.display = 'none';
   if (stopBtn) stopBtn.style.display = 'block';
-
+ 
   const INTERP = 30;
   const pts = [];
   for (let i = 0; i < wps.length-1; i++) {
@@ -1466,7 +1475,7 @@ function viewStartPlay(inst) {
     }
   }
   pts.push({...wps[wps.length-1], wi: wps.length-1});
-
+ 
   let idx = 0;
   const move = () => {
     const pt = pts[idx];
@@ -1484,7 +1493,7 @@ function viewStartPlay(inst) {
     if (pl) pl.textContent = `נקודה ${pt.wi+1} / ${wps.length}`;
   };
   move();
-
+ 
   viewPlayTimer = setInterval(() => {
     idx++;
     if (idx >= pts.length) {
@@ -1499,7 +1508,7 @@ function viewStartPlay(inst) {
     move();
   }, 40);
 }
-
+ 
 function viewStopPlay() {
   if (viewPlayTimer) { clearInterval(viewPlayTimer); viewPlayTimer = null; }
   const g = document.getElementById('view-guard');
@@ -1513,13 +1522,13 @@ function viewStopPlay() {
   if (playBtn) { playBtn.textContent = '▶ הפעל סריקה'; playBtn.style.display = 'block'; }
   if (stopBtn) stopBtn.style.display = 'none';
 }
-
+ 
 // ── Render: All Procedures (combined) ──
 function renderAllProcs() {
   const policeItems    = getProcItems('police');
   const routineItems   = getProcItems('routine');
   const educationItems = getProcItems('education');
-
+ 
   let html = '';
   html += `<div class="proc-section-label">👮 נהלי משטרה</div>`;
   html += `<div class="proc-list">` + policeItems.map((item,i) => procCard(i+1, item.title, item.urls || [], null, item.key)).join('') + `</div>`;
@@ -1527,22 +1536,22 @@ function renderAllProcs() {
   html += `<div class="proc-list">` + routineItems.map((item,i) => procCard(i+1, item.title, item.urls || [], null, item.key)).join('') + `</div>`;
   html += `<div class="proc-section-label" style="margin-top:24px">🎓 נהלי משרד החינוך</div>`;
   html += `<div class="proc-list">` + educationItems.map((item,i) => procCard(i+1, item.title, item.urls || [], null, item.key)).join('') + `</div>`;
-
+ 
   document.getElementById('all-procs').innerHTML = html;
 }
-
+ 
 // ── Render: Commander messages (דבר קב"ט) ──
 function renderCommander() {
   const msgs = appData.commanderMsgs || [];
   const text = appData.commanderText || '';
   const el = document.getElementById('commander-content');
   if (!el) return;
-
+ 
   // Get reader name from localStorage
   const readerName = localStorage.getItem('sec_reader_name') || '';
-
+ 
   let html = '';
-
+ 
   // ── שם קורא — אם עוד לא הוזן ──
   html += `
   <div id="reader-name-bar" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;
@@ -1555,7 +1564,7 @@ function renderCommander() {
            oninput="localStorage.setItem('sec_reader_name',this.value)">
     ${readerName ? `<span style="font-size:.78rem;color:#5dd98a">✓ שם שמור</span>` : ''}
   </div>`;
-
+ 
   // ── דבר קב"ט (free text block) ──
   if (text) {
     html += `
@@ -1569,7 +1578,7 @@ function renderCommander() {
       <div style="font-size:.92rem;line-height:1.85;color:var(--text);white-space:pre-wrap">${escHtml(text)}</div>
     </div>`;
   }
-
+ 
   // ── הוראות השעה ──
   if (!msgs.length && !text) {
     el.innerHTML = `
@@ -1580,12 +1589,12 @@ function renderCommander() {
       </div>`;
     return;
   }
-
+ 
   if (msgs.length) {
     html += `<div style="font-size:.78rem;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:10px;padding-right:4px">⚡ הוראות השעה</div>`;
     // Ensure every message has a key before rendering
     msgs.forEach((m, i) => { if (!m.key) m.key = 'msg_' + (m.ts || i) + '_' + i; });
-
+ 
     const sorted = [...msgs].sort((a,b) => {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
@@ -1596,24 +1605,24 @@ function renderCommander() {
       const urgencyColor = msg.urgency === 'high' ? '#e07b6f' : msg.urgency === 'med' ? '#e8b84b' : '#5dd98a';
       const urgencyLabel = msg.urgency === 'high' ? '🔴 דחוף' : msg.urgency === 'med' ? '🟡 חשוב' : '🟢 מידע';
       const pinnedBadge = msg.pinned ? `<span style="font-size:.7rem;padding:2px 8px;background:rgba(232,184,75,.15);border:1px solid rgba(232,184,75,.3);border-radius:99px;color:var(--accent);margin-left:6px">📌 מוצמד</span>` : '';
-
+ 
       // Readers list
       const readers = msg.readers || {};
       const readersList = Object.values(readers);
       const myName = localStorage.getItem('sec_reader_name') || '';
       const iRead = myName && readers[myName.trim()];
-
+ 
       const readBtn = iRead
         ? `<span style="font-size:.75rem;color:#5dd98a;padding:5px 12px;background:rgba(26,107,58,.15);border:1px solid rgba(26,107,58,.3);border-radius:7px">✅ קראתי</span>`
         : `<button onclick="markAsRead('${msg.key}')" style="font-size:.75rem;padding:5px 14px;background:rgba(232,184,75,.1);color:var(--accent);border:1px solid rgba(232,184,75,.3);border-radius:7px;cursor:pointer;font-family:'Heebo',sans-serif">✓ קראתי</button>`;
-
+ 
       const readersBox = readersList.length
         ? `<div style="margin-top:10px;padding:10px 12px;background:rgba(26,107,58,.08);border:1px solid rgba(26,107,58,.2);border-radius:9px">
              <div style="font-size:.7rem;color:#5dd98a;font-weight:700;margin-bottom:7px">👁 קראו ${readersList.length} מאבטחים:</div>
              <div style="display:flex;flex-wrap:wrap;gap:5px">${readersList.map(r=>`<span style="font-size:.72rem;padding:3px 10px;background:rgba(26,107,58,.18);border:1px solid rgba(26,107,58,.35);border-radius:99px;color:#5dd98a">✓ ${escHtml(r.name)}</span>`).join('')}</div>
            </div>`
         : `<div style="margin-top:8px;font-size:.7rem;color:var(--muted)">טרם אישר אף מאבטח</div>`;
-
+ 
       html += `
       <div style="background:var(--surface);border:1px solid ${urgencyColor}33;border-right:4px solid ${urgencyColor};border-radius:12px;padding:16px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
@@ -1630,10 +1639,10 @@ function renderCommander() {
       </div>`;
     });
   }
-
+ 
   el.innerHTML = html;
 }
-
+ 
 async function markAsRead(msgKey) {
   const name = (localStorage.getItem('sec_reader_name') || '').trim();
   if (!name) {
@@ -1647,12 +1656,12 @@ async function markAsRead(msgKey) {
     return;
   }
   const msgs = appData.commanderMsgs || [];
-
+ 
   // Fix: add key to any message that is missing one (backward compat)
   msgs.forEach((m, i) => {
     if (!m.key) m.key = 'msg_' + (m.ts || i) + '_' + i;
   });
-
+ 
   const msg = msgs.find(m => m.key === msgKey);
   if (!msg) {
     console.warn('markAsRead: message not found for key', msgKey);
@@ -1664,7 +1673,7 @@ async function markAsRead(msgKey) {
   await persist('commanderMsgs', msgs);
   renderCommander();
 }
-
+ 
 function procCard(num, title, url, text, fileKey) {
   const pfRaw = (appData.procFiles || {})[fileKey] || null;
   const pfArr = pfRaw ? (Array.isArray(pfRaw) ? pfRaw : [pfRaw]) : [];
@@ -1712,7 +1721,7 @@ function procCard(num, title, url, text, fileKey) {
       <div class="proc-body">${body}</div>
     </div>`;
 }
-
+ 
 // ── Render: Phones ──
 function renderPhones() {
   const ph = appData.phones || {};
@@ -1766,7 +1775,7 @@ function renderPhones() {
   html += '</div>';
   document.getElementById('phone-content').innerHTML = html;
 }
-
+ 
 // ── Admin ──
 function openAdminLogin() {
   document.getElementById('admin-overlay').classList.add('show');
@@ -1775,9 +1784,9 @@ function openAdminLogin() {
   setTimeout(() => document.getElementById('pass-input').focus(), 100);
 }
 function closeOverlay() { document.getElementById('admin-overlay').classList.remove('show'); }
-
+ 
 function getPass() { return localStorage.getItem(PASS_KEY) || DEFAULT_PASS; }
-
+ 
 async function syncPassFromFirebase() {
   if (!isFirebaseConfigured() || !window._db) return;
   try {
@@ -1788,7 +1797,7 @@ async function syncPassFromFirebase() {
     }
   } catch(e) { console.warn('Could not sync password from Firebase', e); }
 }
-
+ 
 async function doLogin() {
   // Sync password from Firebase before checking
   await syncPassFromFirebase();
@@ -1803,7 +1812,7 @@ async function doLogin() {
   }
 }
 function doLogout() { showPage('home-page'); }
-
+ 
 function buildAdminUI() {
   const ph = appData.phones || {};
   ['police','mokad','mada','fire','eldad','mor','shlomi'].forEach(k => {
@@ -1820,7 +1829,7 @@ function buildAdminUI() {
   // Load commander text
   const cmdTextEl = document.getElementById('commander-text-input');
   if (cmdTextEl) cmdTextEl.value = appData.commanderText || '';
-
+ 
   // Build map pills
   const pills = document.getElementById('map-pills');
   pills.innerHTML = '';
@@ -1842,7 +1851,7 @@ function buildAdminUI() {
   // Load first institution's route after DOM is painted
   setTimeout(() => reLoadForInst(0), 60);
 }
-
+ 
 async function savePhones() {
   appData.phones = appData.phones || {};
   // Global fields
@@ -1862,8 +1871,8 @@ async function saveMap() {
   await persist('maps', appData.maps);
   flash('ok-map');
 }
-
-
+ 
+ 
 // ══ Dynamic Procedure Admin ══
 function getProcItems(type) {
   const items = (appData.procItems || {})[type];
@@ -1872,13 +1881,13 @@ function getProcItems(type) {
   if (type === 'education') return DEFAULT_EDUCATION_PROCS.map(d => ({...d, urls:[]}));
   return DEFAULT_ROUTINE_PROCS.map(d => ({...d, urls:[]}));
 }
-
+ 
 function renderProcAdmin(type) {
   const containerId = type === 'police' ? 'police-procs-admin' : type === 'education' ? 'education-procs-admin' : 'routine-procs-admin';
   const container = document.getElementById(containerId);
   if (!container) return;
   const items = getProcItems(type);
-
+ 
   container.innerHTML = items.map((item, idx) => {
     const urlsHTML = (item.urls || []).map((u, ui) => `
       <div class="pf-item">
@@ -1888,7 +1897,7 @@ function renderProcAdmin(type) {
       </div>`).join('');
     const filesHTML = ((appData.procFiles || {})[item.key] || []).map ? 
       ((appData.procFiles || {})[item.key] || []).map ? '' : '' : '';
-
+ 
     return `
     <div class="proc-admin-row" style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -1912,11 +1921,11 @@ function renderProcAdmin(type) {
       <div class="pf-list" id="fs-${item.key}" style="margin-top:4px"></div>
     </div>`;
   }).join('');
-
+ 
   // Re-render file lists
   items.forEach(item => renderProcFileList(item.key));
 }
-
+ 
 function addProcItem(type) {
   appData.procItems = appData.procItems || {};
   const items = getProcItems(type);
@@ -1925,7 +1934,7 @@ function addProcItem(type) {
   appData.procItems[type] = items;
   renderProcAdmin(type);
 }
-
+ 
 function deleteProcItem(type, idx) {
   const items = getProcItems(type);
   const title = items[idx] ? items[idx].title : 'נוהל זה';
@@ -1953,14 +1962,14 @@ function deleteProcItem(type, idx) {
     }
   }
 }
-
+ 
 function updateProcTitle(type, idx, val) {
   const items = getProcItems(type);
   if (items[idx]) items[idx].title = val;
   appData.procItems = appData.procItems || {};
   appData.procItems[type] = items;
 }
-
+ 
 function addProcItemUrl(type, idx) {
   const urlEl  = document.getElementById(`pi-url-${type}-${idx}`);
   const nameEl = document.getElementById(`pi-name-${type}-${idx}`);
@@ -1976,7 +1985,7 @@ function addProcItemUrl(type, idx) {
   if (nameEl) nameEl.value = '';
   renderProcAdmin(type);
 }
-
+ 
 function deleteProcItemUrl(type, idx, urlIdx) {
   const items = getProcItems(type);
   if (items[idx] && items[idx].urls) items[idx].urls.splice(urlIdx, 1);
@@ -1984,7 +1993,7 @@ function deleteProcItemUrl(type, idx, urlIdx) {
   appData.procItems[type] = items;
   renderProcAdmin(type);
 }
-
+ 
 // ── Multi-URL management for procedures ──
 function fixGdriveUrl(url) {
   // Normalize Google Drive links — keep as /view (opens in new tab)
@@ -1992,7 +2001,7 @@ function fixGdriveUrl(url) {
   if (m) return `https://drive.google.com/file/d/${m[1]}/view?usp=sharing`;
   return url;
 }
-
+ 
 function addProcUrl(key) {
   const input = document.getElementById('a-' + key);
   const nameInput = document.getElementById('a-' + key + '-name');
@@ -2012,7 +2021,7 @@ function addProcUrl(key) {
   persist('procs', appData.procs);
   saveLocal();
 }
-
+ 
 function deleteProcUrl(key, idx) {
   appData.procs = appData.procs || {};
   const arr = Array.isArray(appData.procs[key]) ? appData.procs[key] :
@@ -2024,7 +2033,7 @@ function deleteProcUrl(key, idx) {
   persist('procs', appData.procs);
   saveLocal();
 }
-
+ 
 function renderProcUrlList(key) {
   const container = document.getElementById('ul-' + key);
   if (!container) return;
@@ -2045,11 +2054,11 @@ function renderProcUrlList(key) {
     </div>`;
   }).join('');
 }
-
+ 
 function renderAllProcUrlLists() {
   ['shoot','combat','anon','suspect','r1file','r2file'].forEach(renderProcUrlList);
 }
-
+ 
 async function saveProcs() {
   appData.procs = appData.procs || {};
   appData.procItems = appData.procItems || {};
@@ -2069,22 +2078,22 @@ async function saveRoutine() {
   saveLocal();
   flash('ok-routine');
 }
-
-
+ 
+ 
 async function persist(key, val) {
   if (isFirebaseConfigured() && window._db) {
     try { await dbSet('data/' + key, val); } catch(e) { console.warn('Firebase write failed', e); }
   }
   saveLocal();
 }
-
+ 
 function flash(id) {
   const el = document.getElementById(id);
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2500);
 }
-
-
+ 
+ 
 // ══════════════════════════════════════════
 //  ROUTE EDITOR ENGINE
 // ══════════════════════════════════════════
@@ -2098,15 +2107,15 @@ let reInterpIdx = 0;
 let rePlayStep = 0;
 let reStepMs = 600;
 const RE_INTERP = 30;
-
+ 
 // Safe DOM getter — runs cb only if element exists
 function reGet(id, cb) {
   const el = document.getElementById(id);
   if (el) cb(el);
 }
-
+ 
 function reUpload() { document.getElementById('re-file-input').click(); }
-
+ 
 function reLoadImage(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -2122,7 +2131,7 @@ function reLoadImage(event) {
   reader.readAsDataURL(file);
   event.target.value = '';
 }
-
+ 
 function reEventToPercent(e) {
   const rect = document.getElementById('re-canvas').getBoundingClientRect();
   let cx = e.clientX, cy = e.clientY;
@@ -2132,7 +2141,7 @@ function reEventToPercent(e) {
     y: Math.max(0,Math.min(100, (cy-rect.top)/rect.height*100))
   };
 }
-
+ 
 function reOnClick(e) {
   if (!reImageLoaded || rePlaying) return;
   if (e.target.classList.contains('wp-dot')) return;
@@ -2145,9 +2154,9 @@ function reOnClick(e) {
   reGet('re-redo-btn', el=>el.style.opacity='.4');
   reAutoSave();
 }
-
+ 
 function reOnTouch(e) { e.preventDefault(); reOnClick(e); }
-
+ 
 function reOnHover(e) {
   reGet('re-prev', prev => {
     if (!reImageLoaded || rePlaying || reWaypoints.length === 0) { prev.setAttribute('display','none'); return; }
@@ -2158,22 +2167,22 @@ function reOnHover(e) {
     prev.setAttribute('x2',x); prev.setAttribute('y2',y);
   });
 }
-
+ 
 function reRenderDots() {
   const canvas = document.getElementById('re-canvas');
   canvas.querySelectorAll('.wp-dot').forEach(d=>d.remove());
-
+ 
   reWaypoints.forEach((pt,i) => {
     const n   = reWaypoints.length;
     const isStart = i === 0;
     const isEnd   = i === n-1 && n > 1;
     const isMid   = !isStart && !isEnd;
-
+ 
     const dot = document.createElement('div');
     dot.className = `wp-dot ${isStart?'wp-start':isEnd?'wp-end':'wp-mid'}`;
     dot.style.left = pt.x+'%';
     dot.style.top  = pt.y+'%';
-
+ 
     // Label for start / end
     if (isStart || isEnd) {
       const lbl = document.createElement('div');
@@ -2181,7 +2190,7 @@ function reRenderDots() {
       lbl.textContent = isStart ? '▶ תחילת סריקה' : '⬛ סוף סריקה';
       dot.appendChild(lbl);
     }
-
+ 
     // Icon / number inside dot
     const inner = document.createElement('div');
     inner.className = 'wp-num';
@@ -2189,7 +2198,7 @@ function reRenderDots() {
     else if (isEnd)  inner.textContent = '■';
     else             inner.textContent = i;
     dot.appendChild(inner);
-
+ 
     // Delete X button
     const del = document.createElement('div');
     del.className = 'wp-delete';
@@ -2205,18 +2214,18 @@ function reRenderDots() {
       reAutoSave();
     });
     dot.appendChild(del);
-
+ 
     // Keep dblclick as fallback
     dot.addEventListener('dblclick', ev => {
       ev.stopPropagation();
       del.click();
     });
-
+ 
     reMakeDraggable(dot, i);
     canvas.appendChild(dot);
   });
 }
-
+ 
 function reMakeDraggable(dot,idx) {
   let dragging=false;
   const start = e => { e.stopPropagation(); dragging=true; };
@@ -2235,7 +2244,7 @@ function reMakeDraggable(dot,idx) {
   window.addEventListener('mouseup',end);
   window.addEventListener('touchend',end);
 }
-
+ 
 function reBuildPath(pts) {
   if(pts.length<2) return '';
   let d=`M ${pts[0].x} ${pts[0].y}`;
@@ -2246,13 +2255,13 @@ function reBuildPath(pts) {
   d+=` L ${pts[pts.length-1].x} ${pts[pts.length-1].y}`;
   return d;
 }
-
+ 
 function reRenderRoute() {
   const d = reBuildPath(reWaypoints);
   reGet('re-route', el=>el.setAttribute('d',d));
   reGet('re-halo',  el=>el.setAttribute('d',d));
 }
-
+ 
 function reUndo() {
   if(reWaypoints.length===0) return;
   // Push to redo stack before undoing
@@ -2263,7 +2272,7 @@ function reUndo() {
   reGet('re-redo-btn', el=>el.style.opacity='1');
   reAutoSave();
 }
-
+ 
 function reRedo() {
   if(reRedoStack.length===0) return;
   reWaypoints.push(reRedoStack.pop());
@@ -2272,7 +2281,7 @@ function reRedo() {
   if(reRedoStack.length===0) reGet('re-redo-btn', el=>el.style.opacity='.4');
   reAutoSave();
 }
-
+ 
 function reClear() {
   reRedoStack=[];
   reWaypoints=[];
@@ -2283,7 +2292,7 @@ function reClear() {
   reStopPlay();
   reAutoSave();
 }
-
+ 
 function reClearSilent() {
   reWaypoints=[]; reRedoStack=[]; reImageLoaded=false;
   reGet('re-canvas',      el => el.querySelectorAll('.wp-dot').forEach(d=>d.remove()));
@@ -2293,7 +2302,7 @@ function reClearSilent() {
   reGet('re-img',         el => { el.src=''; el.style.display='none'; });
   reGet('re-placeholder', el => el.classList.remove('hidden'));
 }
-
+ 
 // Auto-save route (image as base64 + waypoints) to appData
 async function reAutoSave() {
   if(!currentInst && currentInst!==0) return;
@@ -2311,7 +2320,7 @@ async function reAutoSave() {
   // Save full (with image) to localStorage
   saveLocal();
 }
-
+ 
 // Playback
 function reBuildInterp(pts) {
   if(pts.length<2) return [];
@@ -2326,7 +2335,7 @@ function reBuildInterp(pts) {
   res.push({...pts[pts.length-1], wpIdx:pts.length-1});
   return res;
 }
-
+ 
 function reStartPlay() {
   if(!reImageLoaded){alert('העלה תמונה תחילה');return;}
   if(reWaypoints.length<2){alert('סמן לפחות 2 נקודות');return;}
@@ -2357,7 +2366,7 @@ function reStartPlay() {
     }
   },frameMs);
 }
-
+ 
 function reMoveGuard(pt) {
   const g=document.getElementById('re-guard'), p=document.getElementById('re-pulse');
   if(!g||!p) return;
@@ -2371,7 +2380,7 @@ function reMoveGuard(pt) {
     if(svg) svg.style.transform=`rotate(${ang}deg)`;
   }
 }
-
+ 
 function reFinishPlay() {
   clearInterval(reTimer); rePlaying=false;
   reGet('re-step-num', el => el.textContent=reWaypoints.length);
@@ -2385,7 +2394,7 @@ function reFinishPlay() {
     el.querySelectorAll('.wp-dot').forEach(d=>d.style.opacity='1');
   });
 }
-
+ 
 function reStopPlay() {
   clearInterval(reTimer); rePlaying=false;
   reGet('re-guard',   el => el.style.display='none');
@@ -2398,7 +2407,7 @@ function reStopPlay() {
     el.querySelectorAll('.wp-dot').forEach(d=>d.style.opacity='1');
   });
 }
-
+ 
 function reUpdateSpeed(val) {
   reGet('re-speed-lbl', el=>el.textContent='×'+val);
   reStepMs=Math.round(1800/val);
@@ -2412,9 +2421,9 @@ function reUpdateSpeed(val) {
     },frameMs);
   }
 }
-
-
-
+ 
+ 
+ 
 // ── Phone per-institution pills ──
 function buildPhoneInstPills(initIdx) {
   selPhoneInst = initIdx;
@@ -2437,7 +2446,7 @@ function buildPhoneInstPills(initIdx) {
   });
   phoneInstLoad(initIdx);
 }
-
+ 
 function phoneInstLoad(idx) {
   const instPhones = ((appData.phones || {}).inst || {})[idx] || {};
   const fields = ['principal-name','principal-phone','security-name','security-phone'];
@@ -2446,7 +2455,7 @@ function phoneInstLoad(idx) {
     if (el) el.value = instPhones[k] || '';
   });
 }
-
+ 
 function phoneInstSave(idx) {
   appData.phones = appData.phones || {};
   appData.phones.inst = appData.phones.inst || {};
@@ -2458,7 +2467,7 @@ function phoneInstSave(idx) {
   });
   appData.phones.inst[idx] = data;
 }
-
+ 
 // ── Compress image to base64 (max ~200KB) ──
 function compressImage(src, maxW, maxH, quality) {
   return new Promise(resolve => {
@@ -2475,30 +2484,30 @@ function compressImage(src, maxW, maxH, quality) {
     img.src = src;
   });
 }
-
+ 
 // ── Publish route (admin → public) ──
 async function publishRoute() {
   if (!reImageLoaded) { alert('העלה תמונה תחילה'); return; }
   if (reWaypoints.length < 2) { alert('סמן לפחות 2 נקודות לפני פרסום'); return; }
-
+ 
   // Show saving indicator
   const btn = document.querySelector('[onclick="publishRoute()"]');
   if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
-
+ 
   // Compress image aggressively → max 800×600, quality 0.5 (~40-80KB)
   const img = document.getElementById('re-img');
   const compressed = await compressImage(img.src, 800, 600, 0.5);
-
+ 
   // Log size for debugging
   const sizeKB = Math.round(compressed.length * 0.75 / 1024);
   console.log('Compressed image size:', sizeKB, 'KB');
-
+ 
   appData.publishedRoutes = appData.publishedRoutes || {};
   appData.publishedRoutes[selMapInst] = {
     waypoints: reWaypoints,
     image: compressed
   };
-
+ 
   // Save to Firebase
   if (isFirebaseConfigured() && window._db) {
     try {
@@ -2515,12 +2524,12 @@ async function publishRoute() {
       console.error('Firebase save error:', e);
     }
   }
-
+ 
   saveLocal();
   if (btn) { btn.textContent = '🚀 פרסם מסלול'; btn.disabled = false; }
   flash('ok-map');
 }
-
+ 
 // ── File upload for procedures ──
 function renderProcFileList(key) {
   const container = document.getElementById('fs-' + key);
@@ -2534,7 +2543,7 @@ function renderProcFileList(key) {
       <button class="pf-del" onclick="deleteProcFile('${key}',${i})" title="מחק קובץ">✕</button>
     </div>`).join('');
 }
-
+ 
 function deleteProcFile(key, idx) {
   appData.procFiles = appData.procFiles || {};
   const arr = Array.isArray(appData.procFiles[key]) ? appData.procFiles[key] : [appData.procFiles[key]].filter(Boolean);
@@ -2544,7 +2553,7 @@ function deleteProcFile(key, idx) {
   saveLocal();
   renderProcFileList(key);
 }
-
+ 
 function handleProcFile(key, input) {
   const files = Array.from(input.files);
   if (!files.length) return;
@@ -2582,16 +2591,16 @@ function handleProcFile(key, input) {
     reader.readAsDataURL(file);
   });
 }
-
-
+ 
+ 
 function reLoadForInst(idx) {
   // Stop timer without touching DOM (elements may not exist yet)
   clearInterval(reTimer);
   rePlaying = false;
   reInterpIdx = 0;
-
+ 
   reClearSilent();
-
+ 
   const saved = (appData.publishedRoutes || {})[idx] || (appData.routes || {})[idx];
   if (saved) {
     reWaypoints = (saved.waypoints || []).map(p => ({x: p.x, y: p.y}));
@@ -2606,7 +2615,7 @@ function reLoadForInst(idx) {
     reGet('re-pt-count', el => el.textContent = reWaypoints.length);
     reGet('re-redo-btn', el => el.style.opacity = '.4');
   }
-
+ 
   // Reset playback UI safely
   reGet('re-guard',    el => el.style.display = 'none');
   reGet('re-pulse',    el => el.style.display = 'none');
@@ -2629,12 +2638,12 @@ function renderCommanderAdmin() {
   const container = document.getElementById('commander-admin');
   if (!container) return;
   const msgs = appData.commanderMsgs || [];
-
+ 
   if (!msgs.length) {
     container.innerHTML = `<div style="color:var(--muted);font-size:.85rem;padding:8px 0">אין הודעות. לחץ "+ הוסף הודעה" ליצירת הוראת שעה.</div>`;
     return;
   }
-
+ 
   container.innerHTML = msgs.map((msg, i) => {
     const urgencyColor = msg.urgency === 'high' ? '#e07b6f' : msg.urgency === 'med' ? '#e8b84b' : '#5dd98a';
     const readers = Object.values(msg.readers || {});
@@ -2674,7 +2683,7 @@ function renderCommanderAdmin() {
     </div>`;
   }).join('');
 }
-
+ 
 function addCommanderMsg() {
   appData.commanderMsgs = appData.commanderMsgs || [];
   const key = 'msg_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
@@ -2682,7 +2691,7 @@ function addCommanderMsg() {
   renderCommanderAdmin();
   saveCommanderMsgs();
 }
-
+ 
 function deleteCommanderMsg(idx) {
   const btn = event.target;
   if (btn.dataset.confirm) {
@@ -2696,34 +2705,34 @@ function deleteCommanderMsg(idx) {
     setTimeout(() => { btn.textContent = '🗑 מחק'; btn.style.background = 'rgba(192,57,43,.15)'; delete btn.dataset.confirm; }, 3000);
   }
 }
-
+ 
 function updateCmdField(idx, field, val) {
   if (!appData.commanderMsgs || !appData.commanderMsgs[idx]) return;
   appData.commanderMsgs[idx][field] = val;
   saveCommanderMsgs();
 }
-
+ 
 async function saveCommanderMsgs() {
   await persist('commanderMsgs', appData.commanderMsgs || []);
   flash('ok-commander');
 }
-
+ 
 function updateCommanderText(val) {
   appData.commanderText = val;
 }
-
+ 
 async function saveCommanderText() {
   appData.commanderText = (document.getElementById('commander-text-input') || {}).value || appData.commanderText || '';
   await persist('commanderText', appData.commanderText);
   flash('ok-commander-text');
 }
-
+ 
 // ── Utils ──
 function escHtml(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
+ 
 // ── Keyboard shortcuts ──
 document.addEventListener('keydown', e => {
   // Only when admin page is visible
@@ -2731,7 +2740,7 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey||e.metaKey) && e.key==='z') { e.preventDefault(); reUndo(); }
   if ((e.ctrlKey||e.metaKey) && (e.key==='y'||(e.shiftKey&&e.key==='z'))) { e.preventDefault(); reRedo(); }
 });
-
+ 
 // ── URL routing ── ?inst=N opens directly
 window.addEventListener('load', () => {
   const p = new URLSearchParams(window.location.search);
