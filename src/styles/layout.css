@@ -182,6 +182,49 @@
   margin-top: 2px;
 }
 
+/* ── Admin Navigation ── */
+.admin-nav {
+  display: flex;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.admin-nav::-webkit-scrollbar { display: none; }
+
+.admin-nav-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  font-family: var(--font);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.admin-nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.admin-nav-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(232,184,75,0.05);
+}
+
+/* ── Admin Sections ── */
+.admin-section {
+  display: none;
+  animation: fadeIn 0.25s var(--ease);
+}
+.admin-section.active { display: block; }
+
 .admin-body {
   padding: 20px 16px;
 }

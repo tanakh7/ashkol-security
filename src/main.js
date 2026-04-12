@@ -151,6 +151,16 @@ function bindGlobalEvents() {
     if (e.key === 'Enter') doLogin();
   });
 
+  // Admin section navigation
+  document.getElementById('admin-nav')?.addEventListener('click', e => {
+    const btn = e.target.closest('.admin-nav-btn');
+    if (!btn) return;
+    const section = btn.dataset.section;
+    document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.toggle('active', s.dataset.section === section));
+    window.scrollTo(0, 0);
+  });
+
   // Admin logout
   document.getElementById('btn-logout')?.addEventListener('click', () => goHome());
 }

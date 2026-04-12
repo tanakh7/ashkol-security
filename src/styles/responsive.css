@@ -48,6 +48,8 @@
 
   .admin-topbar { padding: 18px 48px; }
   .admin-topbar h1 { font-size: 1.4rem; }
+  .admin-nav { padding: 0 48px; }
+  .admin-nav-btn { font-size: 0.88rem; padding: 14px 16px; }
   .admin-body {
     max-width: 780px;
     margin: 0 auto;

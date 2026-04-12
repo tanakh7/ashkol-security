@@ -116,8 +116,17 @@
       <button class="btn-danger" id="btn-logout">יציאה</button>
     </header>
 
+    <nav class="admin-nav" id="admin-nav">
+      <button class="admin-nav-btn active" data-section="institutions">🏫 מוסדות</button>
+      <button class="admin-nav-btn" data-section="phones">📞 טלפונים</button>
+      <button class="admin-nav-btn" data-section="routes">🗺️ מסלולים</button>
+      <button class="admin-nav-btn" data-section="procedures">📋 נהלים</button>
+      <button class="admin-nav-btn" data-section="commander">📢 הודעות</button>
+    </nav>
+
     <div class="admin-body">
       <!-- Institutions Management -->
+      <div class="admin-section active" data-section="institutions">
       <div class="a-card">
         <div class="a-card-head">
           <span>🏫 ניהול מוסדות חינוך</span>
@@ -145,6 +154,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /section:institutions -->
 
       <!-- Firebase Setup Card -->
       <div class="a-card" id="firebase-setup-card" style="display:none">
@@ -168,6 +178,7 @@
       </div>
 
       <!-- Phones -->
+      <div class="admin-section" data-section="phones">
       <div class="a-card">
         <div class="a-card-head">📞 טלפונים</div>
         <div class="a-card-body">
@@ -233,7 +244,10 @@
         </div>
       </div>
 
+      </div><!-- /section:phones -->
+
       <!-- Route Editor -->
+      <div class="admin-section" data-section="routes">
       <div class="a-card">
         <div class="a-card-head">🗺️ מסלולי סריקה</div>
         <div class="a-card-body" style="padding:0">
@@ -335,6 +349,11 @@
         </div>
       </div>
 
+      </div><!-- /section:routes -->
+
+      <!-- Procedures -->
+      <div class="admin-section" data-section="procedures">
+
       <!-- Police Procedures -->
       <div class="a-card">
         <div class="a-card-head">
@@ -380,7 +399,10 @@
         </div>
       </div>
 
+      </div><!-- /section:procedures -->
+
       <!-- Commander Messages -->
+      <div class="admin-section" data-section="commander">
       <div class="a-card">
         <div class="a-card-head">📢 דבר קב"ט והוראות השעה</div>
         <div class="a-card-body">
@@ -408,6 +430,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /section:commander -->
 
     </div>
   </div>
