@@ -11,7 +11,7 @@ import * as fb from './firebase.js';
 import {
   INSTS, INST_ICONS, appData,
   setCurrentInst, currentInst,
-  loadFromLocal, startListening, syncPassFromFirebase, getPass,
+  loadFromLocal, startListening, syncPassFromFirebase, verifyPassword,
 } from './store.js';
 import { showPage, goHome, switchTab } from './router.js';
 
@@ -168,9 +168,19 @@ function closeOverlay() {
 }
 
 async function doLogin() {
-  await syncPassFromFirebase();
   const entered = document.getElementById('pass-input')?.value || '';
-  if (entered === getPass()) {
+  const btnLogin = document.getElementById('btn-login');
+  const errEl = document.getElementById('pass-err');
+
+  // Show loading state
+  if (btnLogin) { btnLogin.textContent = 'מאמת...'; btnLogin.disabled = true; }
+  if (errEl) errEl.textContent = '';
+
+  const isValid = await verifyPassword(entered);
+
+  if (btnLogin) { btnLogin.textContent = 'כניסה'; btnLogin.disabled = false; }
+
+  if (isValid) {
     closeOverlay();
     buildAdminUI();
     showPage('admin-page');

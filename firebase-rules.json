@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "config": {
+      ".read": false,
+      ".write": false
+    },
+
+    "verify": {
+      "$attempt": {
+        ".read": false,
+        ".write": true,
+        ".validate": "newData.val() === root.child('config/adminPass').val()"
+      }
+    },
+
+    "data": {
+      ".read": true,
+
+      "commanderMsgs": {
+        ".write": true
+      },
+      "phones": {
+        ".write": true
+      },
+      "procs": {
+        ".write": true
+      },
+      "procItems": {
+        ".write": true
+      },
+      "commanderText": {
+        ".write": true
+      },
+      "routes": {
+        ".write": true
+      },
+      "publishedRoutes": {
+        ".write": true
+      }
+    }
+  }
+}

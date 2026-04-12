@@ -125,22 +125,37 @@ export function startListening(onData) {
   });
 }
 
-// ── Password ──
+// ── Password (Secure Verification) ──
+// The password is NEVER read from Firebase.
+// Instead, we write the attempt to 'verify/{id}' — Firebase rules only allow
+// the write if the value matches 'config/adminPass'. Success = correct password.
+
+export async function verifyPassword(password) {
+  if (!fb.isConfigured() || !fb.isReady()) {
+    // Offline fallback — check localStorage
+    return password === (localStorage.getItem(PASS_KEY) || '');
+  }
+  try {
+    const attemptId = 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    await fb.dbSet('verify/' + attemptId, password);
+    // Write succeeded → password is correct
+    // Clean up the verification node
+    try { await fb.dbSet('verify/' + attemptId, null); } catch (e) {}
+    return true;
+  } catch (e) {
+    // Write failed → password is wrong (or network error)
+    return false;
+  }
+}
+
+// Legacy — kept for offline fallback only
 export function getPass() {
   return localStorage.getItem(PASS_KEY) || '';
 }
 
 export async function syncPassFromFirebase() {
-  if (!fb.isConfigured() || !fb.isReady()) return;
-  try {
-    const snap = await fb.dbGet('data/adminPass');
-    if (snap.exists()) {
-      const fbPass = snap.val();
-      if (fbPass) localStorage.setItem(PASS_KEY, fbPass);
-    }
-  } catch (e) {
-    console.warn('Could not sync password:', e);
-  }
+  // No longer reads password from Firebase (it's now protected)
+  // Password verification is done via write-check in verifyPassword()
 }
 
 // ── Procedure Items ──
