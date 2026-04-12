@@ -137,7 +137,9 @@ export async function verifyPassword(password) {
   }
   try {
     const attemptId = 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-    await fb.dbSet('verify/' + attemptId, password);
+    // Firebase may store the password as a number — try matching both types
+    const val = /^\d+$/.test(password) ? Number(password) : password;
+    await fb.dbSet('verify/' + attemptId, val);
     // Write succeeded → password is correct
     // Clean up the verification node
     try { await fb.dbSet('verify/' + attemptId, null); } catch (e) {}
