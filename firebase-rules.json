@@ -36,6 +36,9 @@
       },
       "publishedRoutes": {
         ".write": true
+      },
+      "institutions": {
+        ".write": true
       }
     }
   }

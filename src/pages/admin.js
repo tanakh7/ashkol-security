@@ -3,11 +3,13 @@
    ══════════════════════════════════════════ */
 
 import {
-  appData, INSTS, persist, saveLocal, getProcItems,
+  appData, INSTS, INST_ICONS, persist, saveLocal, getProcItems,
   selMapInst, setSelMapInst, selPhoneInst, setSelPhoneInst,
+  addInstitution, removeInstitution,
 } from '../store.js';
 import { escHtml, flash, fixGdriveUrl } from '../utils/helpers.js';
 import { initRouteEditor, reLoadForInst } from '../components/routeEditor.js';
+import { buildInstGrid } from '../main.js';
 
 /** Initialize admin page event listeners */
 export function initAdmin() {
@@ -22,6 +24,12 @@ export function initAdmin() {
   document.getElementById('btn-add-routine')?.addEventListener('click', () => addProcItem('routine'));
   document.getElementById('btn-add-education')?.addEventListener('click', () => addProcItem('education'));
   document.getElementById('btn-add-commander')?.addEventListener('click', addCommanderMsg);
+
+  // Institution management
+  document.getElementById('btn-add-inst')?.addEventListener('click', handleAddInst);
+  document.getElementById('new-inst-name')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleAddInst();
+  });
 }
 
 /** Build admin UI with current data */
@@ -32,6 +40,7 @@ export function buildAdminUI() {
     if (el) el.value = ph[k] || '';
   });
 
+  renderInstAdmin();
   buildPhoneInstPills(0);
   renderProcAdmin('police');
   renderProcAdmin('routine');
@@ -431,4 +440,76 @@ async function saveCommanderText() {
   appData.commanderText = (document.getElementById('commander-text-input') || {}).value || appData.commanderText || '';
   await persist('commanderText', appData.commanderText);
   flash('ok-commander-text');
+}
+
+// ══ Institution Management ══
+function renderInstAdmin() {
+  const container = document.getElementById('inst-admin-list');
+  if (!container) return;
+
+  if (!INSTS.length) {
+    container.innerHTML = `<div style="color:var(--muted);font-size:.85rem;padding:8px 0">אין מוסדות. הוסף מוסד חדש למטה.</div>`;
+    return;
+  }
+
+  container.innerHTML = INSTS.map((name, idx) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;
+         background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;
+         transition:border-color .2s">
+      <span style="font-size:1.3rem;flex-shrink:0">${INST_ICONS[idx]}</span>
+      <span style="flex:1;font-size:.88rem;font-weight:600">${escHtml(name)}</span>
+      <span style="font-size:.7rem;color:var(--muted);padding:2px 8px;background:rgba(0,0,0,.2);border-radius:4px">#${idx + 1}</span>
+      <button data-remove-inst="${idx}"
+              style="padding:4px 10px;background:rgba(192,57,43,.12);color:#e07b6f;
+                     border:1px solid rgba(192,57,43,.25);border-radius:6px;cursor:pointer;
+                     font-size:.75rem;font-family:'Heebo',sans-serif;white-space:nowrap">🗑 הסר</button>
+    </div>
+  `).join('');
+
+  // Bind remove buttons
+  container.querySelectorAll('[data-remove-inst]').forEach(btn => {
+    btn.addEventListener('click', () => handleRemoveInst(+btn.dataset.removeInst, btn));
+  });
+}
+
+async function handleAddInst() {
+  const nameEl = document.getElementById('new-inst-name');
+  const iconEl = document.getElementById('new-inst-icon');
+  if (!nameEl || !nameEl.value.trim()) {
+    if (nameEl) { nameEl.style.borderColor = '#e07b6f'; setTimeout(() => nameEl.style.borderColor = '', 2000); }
+    return;
+  }
+
+  const name = nameEl.value.trim();
+  const icon = iconEl ? iconEl.value : '🏫';
+
+  await addInstitution(name, icon);
+
+  nameEl.value = '';
+  renderInstAdmin();
+  buildInstGrid();
+  // Rebuild admin pills
+  buildAdminUI();
+}
+
+async function handleRemoveInst(idx, btnEl) {
+  if (btnEl.dataset.confirm) {
+    await removeInstitution(idx);
+    renderInstAdmin();
+    buildInstGrid();
+    // Rebuild admin pills
+    buildAdminUI();
+  } else {
+    const name = INSTS[idx];
+    btnEl.dataset.confirm = '1';
+    btnEl.innerHTML = `⚠️ בטוח? "${escHtml(name)}"`;
+    btnEl.style.background = 'rgba(192,57,43,.4)';
+    setTimeout(() => {
+      if (btnEl.dataset.confirm) {
+        btnEl.innerHTML = '🗑 הסר';
+        btnEl.style.background = 'rgba(192,57,43,.12)';
+        delete btnEl.dataset.confirm;
+      }
+    }, 3000);
+  }
 }

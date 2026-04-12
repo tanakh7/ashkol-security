@@ -4,17 +4,66 @@
 
 import * as fb from './firebase.js';
 
-// ── Constants ──
-export const INSTS = [
+// ── Default Institutions ──
+const DEFAULT_INSTS = [
   'נופי הבשור קדמי', 'נופי הבשור אחורי', 'מרחבי אשכול', 'שדות אשכול',
   'שחר אשכול', 'שמש אשכול', 'בית ספר בנות', 'נועם נצרים בנים',
   'נועם נצרים בנות', 'תלמוד תורה', 'ישיבת נווה', 'אולפנה', 'רגבים'
 ];
 
-export const INST_ICONS = [
+const DEFAULT_ICONS = [
   '🏘️', '🏘️', '🏫', '🌾', '🌅', '☀️', '📚', '🕍',
   '🕍', '📖', '🌿', '✡️', '🌱'
 ];
+
+// Dynamic institutions (mutable — loaded from Firebase)
+export let INSTS = [...DEFAULT_INSTS];
+export let INST_ICONS = [...DEFAULT_ICONS];
+
+/** Load institutions from appData (called after Firebase sync) */
+export function syncInstitutions() {
+  const saved = appData.institutions;
+  if (saved && Array.isArray(saved) && saved.length > 0) {
+    INSTS.length = 0;
+    INST_ICONS.length = 0;
+    saved.forEach(inst => {
+      INSTS.push(inst.name || '');
+      INST_ICONS.push(inst.icon || '🏫');
+    });
+  }
+}
+
+/** Add a new institution */
+export async function addInstitution(name, icon) {
+  if (!name.trim()) return false;
+  INSTS.push(name.trim());
+  INST_ICONS.push(icon || '🏫');
+  await saveInstitutions();
+  return true;
+}
+
+/** Remove an institution by index */
+export async function removeInstitution(idx) {
+  if (idx < 0 || idx >= INSTS.length) return false;
+  INSTS.splice(idx, 1);
+  INST_ICONS.splice(idx, 1);
+  // Clean up associated data
+  if (appData.phones?.inst) delete appData.phones.inst[idx];
+  if (appData.routes) delete appData.routes[idx];
+  if (appData.publishedRoutes) delete appData.publishedRoutes[idx];
+  await saveInstitutions();
+  await persist('phones', appData.phones);
+  await persist('routes', appData.routes);
+  await persist('publishedRoutes', appData.publishedRoutes);
+  return true;
+}
+
+/** Save institutions to Firebase */
+async function saveInstitutions() {
+  const institutions = INSTS.map((name, i) => ({ name, icon: INST_ICONS[i] }));
+  appData.institutions = institutions;
+  await persist('institutions', institutions);
+}
 
 export const DEFAULT_POLICE_PROCS = [
   { title: 'נוהל פתיחה באש', key: 'shoot' },
@@ -67,6 +116,7 @@ export function loadFromLocal() {
   } catch (e) {
     console.warn('Failed to load local data:', e);
   }
+  syncInstitutions();
 }
 
 export function saveLocal() {
@@ -121,6 +171,7 @@ export function startListening(onData) {
         }
       } catch (e) {}
     }
+    syncInstitutions();
     onData(appData);
   });
 }

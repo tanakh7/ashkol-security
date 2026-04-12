@@ -83,9 +83,13 @@ function updateConnStatus(online) {
 }
 
 // ── Build Institution Grid ──
-function buildInstGrid() {
+export function buildInstGrid() {
   const grid = document.getElementById('inst-grid');
   if (!grid) return;
+
+  // Update counter in hero
+  const pill = document.querySelector('.hero-pill span:last-child');
+  if (pill) pill.textContent = `${INSTS.length} מוסדות חינוך`;
 
   grid.innerHTML = INSTS.map((name, idx) => `
     <div class="inst-card" tabindex="0" role="button" aria-label="פתח ${name}" data-inst="${idx}">
