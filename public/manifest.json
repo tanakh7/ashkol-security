@@ -1,0 +1,20 @@
+{
+  "name": "מערכת אבטחה — מוסדות חינוך אשכול",
+  "short_name": "אבטחה אשכול",
+  "description": "מערכת אבטחה דיגיטלית למוסדות חינוך במועצה אזורית אשכול",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08111f",
+  "theme_color": "#e8b84b",
+  "orientation": "any",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

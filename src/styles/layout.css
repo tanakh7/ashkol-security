@@ -1,0 +1,192 @@
+/* ══════════════════════════════════════════
+   Layout — Top Bar, Headers
+   ════════���═════════════════════════════════ */
+
+/* ── Top Bar ── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(8, 17, 31, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.logo-badge {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent) 0%, #d4a53d 100%);
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(232, 184, 75, 0.2);
+}
+.logo-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.logo-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.admin-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.admin-trigger:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Institution Header ── */
+.inst-header {
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--blue) 100%);
+  padding: 16px 20px 20px;
+  border-bottom: 2px solid var(--accent);
+  position: relative;
+  overflow: hidden;
+}
+.inst-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 100% at 100% 0%, rgba(232, 184, 75, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 5px 0;
+  margin-bottom: 12px;
+  transition: color var(--transition);
+  position: relative;
+}
+.back-btn:hover { color: var(--accent); }
+.back-arrow {
+  transition: transform var(--transition);
+}
+.back-btn:hover .back-arrow {
+  transform: translateX(4px);
+}
+
+.inst-page-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  position: relative;
+}
+.inst-page-sub {
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-top: 3px;
+  position: relative;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: 1;
+  min-width: 75px;
+  padding: 13px 6px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.tab .ti {
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 3px;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-content {
+  display: none;
+  padding: 20px 16px;
+  animation: fadeIn 0.25s var(--ease);
+}
+.tab-content.active { display: block; }
+
+/* ── Admin Top Bar ── */
+.admin-topbar {
+  background: var(--surface2);
+  border-bottom: 2px solid var(--accent);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-topbar h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-topbar .accent { color: var(--accent); }
+.admin-topbar .admin-icon { font-size: 1.1rem; }
+.admin-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.admin-body {
+  padding: 20px 16px;
+}
+
+#admin-page {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}

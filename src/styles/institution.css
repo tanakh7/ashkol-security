@@ -1,0 +1,220 @@
+/* ══════════════════════════════════════════
+   Institution Page — Tabs Content
+   ══════════════════════════════════════════ */
+
+/* ── Map ── */
+.map-placeholder {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 20px;
+  text-align: center;
+}
+.map-placeholder .mpi {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+}
+.map-placeholder p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.map-placeholder .mp-name {
+  color: var(--text);
+  font-weight: 700;
+}
+.map-placeholder .mp-hint {
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+/* ── Procedures ── */
+.proc-section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  padding-right: 4px;
+}
+.proc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.proc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+.proc-card:hover {
+  border-color: rgba(232, 184, 75, 0.3);
+}
+.proc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.proc-head:hover { background: var(--card-hover); }
+.proc-head-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.proc-n {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  background: var(--accent-dim);
+  border: 1px solid rgba(232, 184, 75, 0.25);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.proc-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.proc-badge {
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+.proc-badge.ok {
+  background: rgba(26, 107, 58, 0.18);
+  color: #5dd98a;
+  border: 1px solid rgba(26, 107, 58, 0.35);
+}
+.proc-badge.pend {
+  background: rgba(192, 57, 43, 0.12);
+  color: #e07b6f;
+  border: 1px solid rgba(192, 57, 43, 0.25);
+}
+.proc-chev {
+  color: var(--muted);
+  font-size: 0.75rem;
+  transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.proc-card.open .proc-chev { transform: rotate(180deg); }
+.proc-body {
+  display: none;
+  padding: 0 16px 16px;
+  animation: fadeIn 0.2s var(--ease);
+}
+.proc-card.open .proc-body { display: block; }
+.proc-body p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.proc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 9px 18px;
+  background: var(--blue);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.proc-link:hover {
+  border-color: var(--accent);
+  background: var(--surface3);
+}
+
+/* ── Phone List ── */
+.phone-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 18px 0 8px;
+}
+.phone-section-label:first-child { margin-top: 0; }
+.phone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.phone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 13px 14px;
+  transition: all var(--transition);
+}
+.phone-row:hover {
+  border-color: rgba(232, 184, 75, 0.35);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+.ph-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ph-av {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.ph-av.emerg  { background: rgba(192, 57, 43, 0.18); }
+.ph-av.person { background: rgba(30, 64, 128, 0.45); }
+.ph-av.service { background: rgba(26, 107, 58, 0.18); }
+.ph-name { font-weight: 600; font-size: 0.88rem; }
+.ph-role { font-size: 0.74rem; color: var(--muted); margin-top: 1px; }
+.ph-right { display: flex; align-items: center; gap: 8px; }
+.ph-num {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  direction: ltr;
+}
+.ph-miss {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.call-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(26, 107, 58, 0.25);
+  border: 1px solid rgba(26, 107, 58, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.call-btn:hover {
+  background: rgba(26, 107, 58, 0.5);
+  transform: scale(1.1);
+}

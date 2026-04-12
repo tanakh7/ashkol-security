@@ -1,0 +1,84 @@
+/* ══════════════════════════════════════════
+   Responsive Design
+   ══════════════════════════════════════════ */
+
+/* ── Small screens ── */
+@media (max-width: 420px) {
+  .hero h1 { font-size: 1.65rem; }
+  .inst-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Tablet (768px+) ── */
+@media (min-width: 768px) {
+  .top-bar { padding: 16px 48px; }
+  .logo-text { font-size: 1.05rem; }
+
+  .inst-header {
+    padding: 20px 48px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .inst-header .back-btn { margin-bottom: 0; }
+  .inst-page-title { font-size: 2rem; }
+  .inst-page-sub { font-size: 0.88rem; }
+
+  .tabs { padding: 0 48px; }
+  .tab { font-size: 0.92rem; padding: 16px 20px; }
+  .tab .ti { font-size: 1.2rem; }
+
+  .tab-content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 28px 0 48px;
+  }
+
+  .phone-row { padding: 16px 20px; border-radius: 13px; }
+  .ph-av { width: 44px; height: 44px; font-size: 1.2rem; }
+  .ph-name { font-size: 1rem; }
+  .ph-role { font-size: 0.8rem; }
+  .ph-num { font-size: 1.1rem; }
+  .call-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+
+  .proc-card { border-radius: 13px; }
+  .proc-head { padding: 15px 18px; }
+  .proc-name { font-size: 1rem; }
+
+  .admin-topbar { padding: 18px 48px; }
+  .admin-topbar h1 { font-size: 1.4rem; }
+  .admin-body {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  .a-card { border-radius: var(--radius-xl); }
+  .a-card-body { padding: 22px; }
+  .f-input { font-size: 0.92rem; }
+
+  .inst-grid {
+    max-width: 720px;
+    gap: 14px;
+    padding: 8px 48px 60px;
+  }
+}
+
+/* ── Desktop (1200px+) ── */
+@media (min-width: 1200px) {
+  .top-bar { padding: 18px 72px; }
+
+  .inst-header { padding: 22px 72px 24px; }
+  .inst-page-title { font-size: 2.4rem; }
+
+  .tabs { padding: 0 72px; }
+  .tab-content { max-width: 960px; }
+
+  .admin-body { max-width: 860px; }
+
+  .inst-grid {
+    max-width: 800px;
+    padding: 8px 72px 60px;
+  }
+}

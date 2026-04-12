@@ -1,0 +1,12 @@
+/* ══════════════════════════════════════════
+   Main CSS Entry — Imports all modules
+   ══════════════════════════════════════════ */
+
+@import './variables.css';
+@import './base.css';
+@import './layout.css';
+@import './components.css';
+@import './home.css';
+@import './institution.css';
+@import './routeEditor.css';
+@import './responsive.css';
